@@ -9,11 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }  // if direct access
 
-if ( ! class_exists( 'PBDA_Functions' ) ) {
+if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 	/**
-	 * Class PBDA_Functions
+	 * Class DAILYATTENDANCE_Functions
 	 */
-	class PBDA_Functions {
+	class DAILYATTENDANCE_Functions {
 
 
 		function get_users_list() {
@@ -82,4 +82,4 @@ if ( ! class_exists( 'PBDA_Functions' ) ) {
 
 global $pbda;
 
-$pbda = new PBDA_Functions();
+$pbda = new DAILYATTENDANCE_Functions();

@@ -6,10 +6,7 @@
  */
 
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}  // if direct access
-
+defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'pbda_get_attendance_report' ) ) {
 	/**
@@ -250,13 +247,13 @@ if ( ! function_exists( 'pbda' ) ) {
 	/**
 	 * Return global $pbda
 	 *
-	 * @return PBDA_Functions
+	 * @return DAILYATTENDANCE_Functions
 	 */
 	function pbda() {
 		global $pbda;
 
 		if ( empty( $pbda ) ) {
-			$pbda = new PBDA_Functions();
+			$pbda = new DAILYATTENDANCE_Functions();
 		}
 
 		return $pbda;

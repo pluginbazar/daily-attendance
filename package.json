@@ -1,0 +1,14 @@
+{
+    "name": "daily-attendance",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "npx tailwindcss -i assets/admin-tailwind.css -o assets/admin/css/tailwind.min.css --minify --watch"
+    },
+    "author": "Pluginbazar",
+    "license": "GPL V2 or Greater",
+    "devDependencies": {
+        "tailwindcss": "^3.3.3"
+    }
+}

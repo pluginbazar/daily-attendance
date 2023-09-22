@@ -13,75 +13,60 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}  // if direct access
+defined( 'ABSPATH' ) || exit;
+defined( 'DAILYATTENDANCE_PLUGIN_URL' ) || define( 'DAILYATTENDANCE_PLUGIN_URL', WP_PLUGIN_URL . '/' . plugin_basename( dirname( __FILE__ ) ) . '/' );
+defined( 'DAILYATTENDANCE_PLUGIN_DIR' ) || define( 'DAILYATTENDANCE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+defined( 'DAILYATTENDANCE_PLUGIN_FILE' ) || define( 'DAILYATTENDANCE_PLUGIN_FILE', plugin_basename( __FILE__ ) );
+
+if ( ! class_exists( 'DAILYATTENDANCE_Main' ) ) {
+	class DAILYATTENDANCE_Main {
+
+		protected static $_instance = null;
+
+		/**
+		 * DAILYATTENDANCE_Main constructor.
+		 */
+		function __construct() {
+
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+
+			$this->define_classes_functions();
+		}
 
 
-define( 'PBDA_PLUGIN_URL', WP_PLUGIN_URL . '/' . plugin_basename( dirname( __FILE__ ) ) . '/' );
-define( 'PBDA_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'PBDA_PLUGIN_FILE', plugin_basename( __FILE__ ) );
+		/**
+		 * Loading classes and functions
+		 */
+		function define_classes_functions() {
 
-/**
- * Class DailyAttendance
- */
-class DailyAttendance {
-
-	/**
-	 * DailyAttendance constructor.
-	 */
-	function __construct() {
-
-		$this->load_scripts();
-		$this->define_classes_functions();
-	}
+			require_once( DAILYATTENDANCE_PLUGIN_DIR . 'includes/functions.php' );
+			require_once( DAILYATTENDANCE_PLUGIN_DIR . 'includes/class-functions.php' );
+			require_once( DAILYATTENDANCE_PLUGIN_DIR . 'includes/class-hooks.php' );
+		}
 
 
-	/**
-	 * Loading classes and functions
-	 */
-	function define_classes_functions() {
+		/**
+		 * Loading scripts to backend
+		 */
+		function admin_scripts() {
 
-//		$settings_path = str_replace( array( 'Pluginbazar/free/', 'Pluginbazar\free/' ), '', ABSPATH );
-//		include $settings_path . "PB-Settings/class-pb-settings.php";
-
-		require_once( PBDA_PLUGIN_DIR . 'includes/class-pb-settings.php' );
-
-		require_once( PBDA_PLUGIN_DIR . 'includes/functions.php' );
-		require_once( PBDA_PLUGIN_DIR . 'includes/class-functions.php' );
-		require_once( PBDA_PLUGIN_DIR . 'includes/class-hooks.php' );
-	}
-
-	/**
-	 * Loading scripts to backend
-	 */
-	function admin_scripts() {
-
-		wp_enqueue_style( 'tooltip', PBDA_PLUGIN_URL . 'assets/tool-tip.min.css' );
-		wp_enqueue_style( 'icofont', PBDA_PLUGIN_URL . 'assets/fonts/icofont.min.css' );
-		wp_enqueue_style( 'pbda_admin_style', PBDA_PLUGIN_URL . 'assets/admin/css/style.css' );
-	}
+			wp_enqueue_style( 'tooltip', DAILYATTENDANCE_PLUGIN_URL . 'assets/tool-tip.min.css' );
+			wp_enqueue_style( 'icofont', DAILYATTENDANCE_PLUGIN_URL . 'assets/fonts/icofont.min.css' );
+			wp_enqueue_style( 'pbda_admin_style', DAILYATTENDANCE_PLUGIN_URL . 'assets/admin/css/style.css' );
+		}
 
 
-	/**
-	 * Loading scripts to the frontend
-	 */
-	function front_scripts() {
+		/**
+		 * @return DAILYATTENDANCE_Main
+		 */
+		public static function instance() {
+			if ( is_null( self::$_instance ) ) {
+				self::$_instance = new self();
+			}
 
-		wp_enqueue_style( 'tooltip', PBDA_PLUGIN_URL . 'assets/tool-tip.min.css' );
-		wp_enqueue_style( 'icofont', PBDA_PLUGIN_URL . 'assets/fonts/icofont.min.css' );
-		wp_enqueue_style( 'pbda_style', PBDA_PLUGIN_URL . 'assets/front/css/style.css' );
-	}
-
-
-	/**
-	 * Loading scripts
-	 */
-	function load_scripts() {
-
-		add_action( 'wp_enqueue_scripts', array( $this, 'front_scripts' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+			return self::$_instance;
+		}
 	}
 }
 
-new DailyAttendance();
+add_action( 'plugins_loaded', array( 'DAILYATTENDANCE_Main', 'instance' ), 100 );

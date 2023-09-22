@@ -4,15 +4,15 @@
  */
 
 
-if ( ! class_exists( 'PBDA_Hooks' ) ) {
+if ( ! class_exists( 'DAILYATTENDANCE_Hooks' ) ) {
 
 	/**
-	 * Class PBDA_Hooks
+	 * Class DAILYATTENDANCE_Hooks
 	 */
-	class PBDA_Hooks {
+	class DAILYATTENDANCE_Hooks {
 
 		/**
-		 * PBDA_Hooks constructor.
+		 * DAILYATTENDANCE_Hooks constructor.
 		 */
 		function __construct() {
 
@@ -179,7 +179,7 @@ if ( ! class_exists( 'PBDA_Hooks' ) ) {
 
 			ob_start();
 
-			include PBDA_PLUGIN_DIR . 'templates/attendance-form.php';
+			include DAILYATTENDANCE_PLUGIN_DIR . 'templates/attendance-form.php';
 
 			return ob_get_clean();
 		}
@@ -320,5 +320,5 @@ if ( ! class_exists( 'PBDA_Hooks' ) ) {
 		}
 	}
 
-	new PBDA_Hooks();
+	new DAILYATTENDANCE_Hooks();
 }

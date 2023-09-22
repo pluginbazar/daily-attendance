@@ -1,11 +1,7 @@
-/**
- * Admin Scripts
- */
-
-(function ($, window, document, pluginObject) {
+(function ($, window, document) {
     "use strict";
 
-})(jQuery, window, document, pbda_object);
+})(jQuery, window, document);
 
 
 
