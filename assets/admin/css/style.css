@@ -1,0 +1,64 @@
+/**
+ * Main Style
+ */
+
+#adminmenu .toplevel_page_daily-attendance .wp-menu-image {
+    left: 9px;
+    position: absolute;
+}
+
+#adminmenu .toplevel_page_daily-attendance .wp-menu-image img {
+    opacity: 0.9;
+}
+
+.dailyattendance-container {
+    width: calc(100% + 20px);
+}
+
+.dailyattendance-topbar {
+    width: calc(100% - 172px);
+}
+
+.dailyattendance-sidebar ul > li {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.dailyattendance-content-wrap {
+    width: calc(100% - 437px);
+}
+
+.dataTables_wrapper select[name="dailyattendance-users_length"],
+.dataTables_wrapper select[name="dailyattendance-users_length"]:focus {
+    width: 45px;
+    outline: none;
+    box-shadow: none;
+    border: none !important;
+}
+
+.dataTables_wrapper #dailyattendance-users_filter input[type="search"],
+.dataTables_wrapper #dailyattendance-users_filter input[type="search"]:focus,
+.dataTables_wrapper #dailyattendance-users_filter input[type="search"]:active {
+    outline: none;
+    box-shadow: none;
+    border-color: #dcdcdc !important;
+    border-radius: 5px;
+}
+
+.dataTables_wrapper #dailyattendance-users_length,
+.dataTables_wrapper #dailyattendance-users_filter {
+    margin-bottom: 8px;
+}
+
+.dataTables_wrapper .dataTables_scrollBody {
+    overflow: visible !important;
+}
+
+.dataTables_wrapper tr {
+    height: 50px
+}
+
+.dataTables_wrapper #user-secret-key {
+    user-select: none;
+    -webkit-user-select: none;
+}

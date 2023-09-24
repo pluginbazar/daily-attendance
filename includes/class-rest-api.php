@@ -1,236 +1,150 @@
 <?php
 /**
- * Class Hooks
+ * Class Rest API
  */
 
-if ( ! class_exists( 'DAILYATTENDANCE_Hooks' ) ) {
-
+if ( ! class_exists( 'DAILYATTENDANCE_Rest_api' ) ) {
 	/**
-	 * Class DAILYATTENDANCE_Hooks
+	 * Class DAILYATTENDANCE_Rest_api
 	 */
-	class DAILYATTENDANCE_Hooks {
+	class DAILYATTENDANCE_Rest_api {
+
+		protected static $_instance = null;
+
 
 		/**
-		 * DAILYATTENDANCE_Hooks constructor.
+		 * DAILYATTENDANCE_Rest_api constructor.
 		 */
 		function __construct() {
 
-			add_action( 'init', array( $this, 'ob_start' ) );
-			add_action( 'wp_footer', array( $this, 'ob_end' ) );
-			add_action( 'init', array( $this, 'register_post_types' ) );
-			add_action( 'init', array( $this, 'generate_monthly_report' ) );
-			add_action( 'admin_menu', array( $this, 'remove_publish_box' ) );
-			add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 			add_action( 'rest_api_init', array( $this, 'register_api' ) );
 		}
 
 
-		function serve_attendances_submit() {
-
-			$user_name    = isset( $_POST['userName'] ) ? sanitize_text_field( $_POST['userName'] ) : '';
-			$password     = isset( $_POST['passWord'] ) ? sanitize_text_field( $_POST['passWord'] ) : '';
-			$current_user = wp_authenticate( $user_name, $password );
-
-			if ( is_wp_error( $current_user ) ) {
-				return new WP_REST_Response( array(
-					'version' => 'V1',
-					'success' => false,
-					'content' => $current_user->get_error_message(),
-				) );
-			}
-
-			if ( ! $current_user instanceof WP_User ) {
-				return new WP_REST_Response( array(
-					'version' => 'V1',
-					'success' => false,
-					'content' => esc_html__( 'Invalid username or password!', 'daily-attendance' ),
-				) );
-			}
-
-			$response = pbda_insert_attendance( $current_user->ID );
-
-			if ( is_wp_error( $response ) ) {
-				return new WP_REST_Response( array(
-					'version' => 'V1',
-					'success' => false,
-					'content' => $response->get_error_message(),
-				) );
-			}
-
-			return new WP_REST_Response( array(
-				'version' => 'V1',
-				'success' => true,
-				'content' => $response,
-			) );
-		}
-
-
+		/**
+		 * Register API endpoints
+		 *
+		 * @return void
+		 */
 		function register_api() {
 
-			register_rest_route( 'v1', '/attendances/submit', array(
+			register_rest_route( 'v2/daily-attendance/', 'submit', array(
 				'methods'  => 'POST',
-				'callback' => array( $this, 'serve_attendances_submit' ),
+				'callback' => array( $this, 'attendance_submit' ),
 			) );
 		}
 
 
 		/**
-		 * Display attendance form
+		 * Handle attendance submit API request
 		 *
-		 * @return false|string
+		 * @param WP_REST_Request $request
+		 *
+		 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
 		 */
-		function display_attendance_form() {
+		function attendance_submit( WP_REST_Request $request ) {
 
-			if ( ! is_user_logged_in() ) {
-				return sprintf( '<p class="pbda-notice pbda-error">%s <a href="%s">%s</a></p>',
-					esc_html__( 'You must login to access this content', 'daily-attendance' ),
-					wp_login_url( get_permalink() ),
-					esc_html__( 'Click here to Login', 'daily-attendance' )
-				);
+			if ( is_wp_error( $response = $this->validate_api_request( $request ) ) ) {
+				return $this->throw_error( $response );
 			}
 
-			ob_start();
+			$secret_key = $request->get_param( 'secret_key' );
+			$status     = $request->get_param( 'status' );
+			$ip_address = $request->get_param( 'ip_address' );
+			$message    = $request->get_param( 'message' );
 
-			include DAILYATTENDANCE_PLUGIN_DIR . 'templates/attendance-form.php';
-
-			return ob_get_clean();
-		}
-
-
-		/**
-		 * Display Reports
-		 *
-		 * @param $post
-		 */
-		public function display_reports( $post ) {
-
-			$this_month = (int) date( 'm' );
-			$this_year  = (int) date( 'Y' );
-			$num_days   = cal_days_in_month( CAL_GREGORIAN, $this_month, $this_year );
-			$export_url = '';
-
-			?>
-            <div class="pbda-reports-wrap">
-
-                <div class="pbda-report-info">
-
-                    <div class="pbda-info">
-                        <span class="label"><?php esc_html_e( 'Report Month', 'daily-attendance' ); ?></span>
-                        <span class="value"><?php echo date( 'F, Y' ); ?></span>
-                    </div>
-
-                    <div class="pbda-info">
-                        <span class="label"><?php esc_html_e( 'Users Count', 'daily-attendance' ); ?></span>
-                        <span class="value"><?php echo count( pbda()->get_users_list() ); ?></span>
-                    </div>
-
-                    <div class="pbda-info">
-                        <span class="label"><?php esc_html_e( 'Export', 'daily-attendance' ); ?></span>
-                        <span class="value"><a
-                                    href="<?php echo esc_url( $export_url ); ?>"><?php esc_html_e( 'CSV (Upcoming Feature)', 'daily-attendance' ); ?></a></span>
-                    </div>
-
-                </div>
-
-				<?php echo pbda_get_attendance_report( $num_days, $post->ID ); ?>
-            </div>
-			<?php
-		}
-
-
-		/**
-		 * Add meta boxes
-		 *
-		 * @param $post_type
-		 */
-		public function add_meta_boxes( $post_type ) {
-
-			if ( in_array( $post_type, array( 'da_reports' ) ) ) {
-
-				add_meta_box( 'da_reports', esc_html__( 'Attendance Reports', 'daily-attendance' ), array(
-					$this,
-					'display_reports'
-				), $post_type, 'normal', 'high' );
+			if ( empty( $secret_key ) || empty( $status ) ) {
+				return $this->rest_response( [ 'message' => esc_html__( 'Empty secret key or status.', 'daily-attendance' ) ], false );
 			}
-		}
 
-
-		/**
-		 * Remove publish box for specific post type
-		 */
-		function remove_publish_box() {
-			remove_meta_box( 'submitdiv', 'da_reports', 'side' );
-		}
-
-
-		/**
-		 * Generate Monthly Report
-		 */
-		function generate_monthly_report() {
-
-			$current_report_id = pbda_current_report_id();
-
-			if ( empty( $current_report_id ) || ! $current_report_id ) {
-				wp_insert_post( array(
-					'post_type'   => 'da_reports',
-					'post_title'  => sprintf( esc_html__( 'Report - %s', 'daily-attendance' ), date( 'M, Y' ) ),
-					'post_status' => 'publish',
-					'meta_input'  => array(
-						'_month' => date( 'Ym' )
-					)
-				) );
+			if ( ! $user_id = dailyattendance_get_user_id_by_secret_key( $secret_key ) ) {
+				return $this->rest_response( [ 'message' => esc_html__( 'Invalid secret key.', 'daily-attendance' ) ], false );
 			}
-		}
 
+			$insert_response         = dailyattendance_insert_activity_entry( $user_id, $status, $message, $ip_address );
+			$insert_response_status  = isset( $insert_response['status'] ) && (bool) $insert_response['status'];
+			$insert_response_message = $insert_response['message'] ?? '';
 
-		/**
-		 * Register Post Types
-		 */
-		function register_post_types() {
-
-			pbda()->PB_Settings()->register_post_type( 'da_reports', array(
-				'singular'      => esc_html__( 'Daily Attendance', 'daily-attendance' ),
-				'plural'        => esc_html__( 'Attendance Reports', 'daily-attendance' ),
-				'menu_icon'     => 'dashicons-yes',
-				'menu_position' => 20,
-				'supports'      => array( '' ),
-				'capabilities'  => array( 'create_posts' => 'do_not_allow' ),
-				'labels'        => array(
-					'edit_item' => esc_html__( 'View Attendance Reports', 'daily-attendance' ),
-				),
-			) );
-		}
-
-
-		/**
-		 * Return Buffered Content
-		 *
-		 * @param $buffer
-		 *
-		 * @return mixed
-		 */
-		public function ob_callback( $buffer ) {
-			return $buffer;
-		}
-
-
-		/**
-		 * Start of Output Buffer
-		 */
-		public function ob_start() {
-			ob_start( array( $this, 'ob_callback' ) );
-		}
-
-
-		/**
-		 * End of Output Buffer
-		 */
-		public function ob_end() {
-			if ( ob_get_length() ) {
-				ob_end_flush();
+			if ( ! $insert_response_status ) {
+				return $this->rest_response( [ 'message' => $insert_response_message ], false );
 			}
+
+			return $this->rest_response( [ 'message' => $insert_response_message ] );
+		}
+
+
+		/**
+		 * Valid api request and if invalid api key then stop executing.
+		 *
+		 * @param WP_REST_Request $request
+		 * @param string $option
+		 *
+		 * @return WP_Error|bool
+		 */
+		public function validate_api_request( WP_REST_Request $request, $option = '' ) {
+
+			$bearer_token  = sanitize_text_field( $request->get_header( 'authorization' ) );
+			$bearer_token  = trim( str_replace( 'Bearer ', '', $bearer_token ) );
+			$signature_key = dailyattendance()->get_signature_key();
+
+			if ( empty( $bearer_token ) ) {
+				return new WP_Error( 401, esc_html__( 'Empty bearer token.', 'daily-attendance' ) );
+			}
+
+			if ( ! hash_equals( $bearer_token, $signature_key ) ) {
+				return new WP_Error( 403, esc_html__( 'Invalid bearer token.', 'daily-attendance' ) );
+			}
+
+			return true;
+		}
+
+
+		/**
+		 * Return REST response
+		 *
+		 * @param $response
+		 * @param $is_success
+		 *
+		 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+		 */
+		private function rest_response( $response = array(), $is_success = true ) {
+
+			$response['success'] = $is_success;
+
+			return rest_ensure_response( new WP_REST_Response( $response ) );
+		}
+
+
+		/**
+		 * Returns error data with WP_REST_Response.
+		 *
+		 * @param WP_Error $error
+		 *
+		 * @return WP_REST_Response|WP_Error|WP_HTTP_Response
+		 */
+		public function throw_error( $error ) {
+			$response = new WP_REST_Response( [
+				'success' => false,
+				'message' => $error->get_error_message(),
+			] );
+			$response->set_status( $error->get_error_code() );
+
+			return rest_ensure_response( $response );
+		}
+
+
+		/**
+		 * @return DAILYATTENDANCE_Rest_api
+		 */
+		public static function instance() {
+			if ( is_null( self::$_instance ) ) {
+				self::$_instance = new self();
+			}
+
+			return self::$_instance;
 		}
 	}
-
-	new DAILYATTENDANCE_Hooks();
 }
+
+DAILYATTENDANCE_Rest_api::instance();
+
