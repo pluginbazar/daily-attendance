@@ -10,9 +10,13 @@
             content_wrap = $('.dailyattendance-content-wrap'),
             el_target_content = content_wrap.find('.dailyattendance-content.content-' + target_content);
 
+        console.log(el_target_content);
+
         if (!el_target_content.hasClass('hidden')) {
             return;
         }
+
+        console.log(target_content);
 
         this_nav_item_wrap.parent().find('> li > div').removeClass('active');
         this_nav_item.addClass('active');

@@ -28,6 +28,11 @@ if ( ! class_exists( 'DAILYATTENDANCE_Rest_api' ) ) {
 		 */
 		function register_api() {
 
+			register_rest_route( 'v2/daily-attendance/', 'details', array(
+				'methods'  => 'POST',
+				'callback' => array( $this, 'attendance_details' ),
+			) );
+
 			register_rest_route( 'v2/daily-attendance/', 'submit', array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'attendance_submit' ),
@@ -48,10 +53,11 @@ if ( ! class_exists( 'DAILYATTENDANCE_Rest_api' ) ) {
 				return $this->throw_error( $response );
 			}
 
-			$secret_key = $request->get_param( 'secret_key' );
-			$status     = $request->get_param( 'status' );
-			$ip_address = $request->get_param( 'ip_address' );
-			$message    = $request->get_param( 'message' );
+			$parameters_str = json_decode( $request->get_body(), true );
+			$secret_key     = $parameters_str['secret_key'] ?? '';
+			$status         = $parameters_str['status'] ?? '';
+			$ip_address     = $parameters_str['ip_address'] ?? '';
+			$message        = $parameters_str['message'] ?? '';
 
 			if ( empty( $secret_key ) || empty( $status ) ) {
 				return $this->rest_response( [ 'message' => esc_html__( 'Empty secret key or status.', 'daily-attendance' ) ], false );
@@ -70,6 +76,59 @@ if ( ! class_exists( 'DAILYATTENDANCE_Rest_api' ) ) {
 			}
 
 			return $this->rest_response( [ 'message' => $insert_response_message ] );
+		}
+
+
+		/**
+		 * Handle attendance details API request
+		 *
+		 * @param WP_REST_Request $request
+		 *
+		 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+		 */
+		function attendance_details( WP_REST_Request $request ) {
+
+//			if ( is_wp_error( $response = $this->validate_api_request( $request ) ) ) {
+//				return $this->throw_error( $response );
+//			};
+
+			$parameters_str = json_decode( $request->get_body(), true );
+
+			if ( ! isset( $parameters_str['secret_key'] ) || empty( $secret_key = $parameters_str['secret_key'] ) ) {
+				return $this->rest_response( [ 'message' => esc_html__( 'Empty secret key.', 'daily-attendance' ) ], false );
+			}
+
+			if ( ! $user_id = dailyattendance_get_user_id_by_secret_key( $secret_key ) ) {
+				return $this->rest_response( [ 'message' => esc_html__( 'Invalid secret key.', 'daily-attendance' ) ], false );
+			}
+
+			$wp_user  = get_user_by( 'ID', $user_id );
+			$response = array(
+				'name'       => $wp_user->display_name,
+				'thumb'      => get_avatar_url( $wp_user->ID ),
+				'roles'      => dailyattendance_get_user_roles_formatted( $wp_user->roles ),
+				'added_on'   => date( 'jS M Y, g:ia', strtotime( $wp_user->user_registered ) ),
+				'today'      => date( 'jS M Y - D' ),
+				'activities' => array(
+					array(
+						'datetime'     => date( 'g:i A' ),
+						'message'      => 'No message',
+						'status_label' => 'Office In'
+					),
+					array(
+						'datetime'     => date( 'g:i A' ),
+						'message'      => 'Out for lunch',
+						'status_label' => 'Office Out'
+					),
+					array(
+						'datetime'     => date( 'g:i A' ),
+						'message'      => 'After lunch',
+						'status_label' => 'Office In'
+					),
+				),
+			);
+
+			return $this->rest_response( $response );
 		}
 
 

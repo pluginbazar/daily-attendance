@@ -59,6 +59,7 @@ if ( ! function_exists( 'dailyattendance_get_user_id_by_secret_key' ) ) {
 	}
 }
 
+
 if ( ! function_exists( 'dailyattendance_insert_activity_entry' ) ) {
 	/**
 	 * insert entry on activity table
@@ -117,4 +118,24 @@ if ( ! function_exists( 'dailyattendance_insert_activity_entry' ) ) {
 }
 
 
+if ( ! function_exists( 'dailyattendance_get_user_roles_formatted' ) ) {
+	/**
+	 * Return formatted users roles
+	 *
+	 * @param $this_user_roles
+	 * @param $glue
+	 *
+	 * @return mixed|null
+	 */
+	function dailyattendance_get_user_roles_formatted( $this_user_roles = [], $glue = ', ' ) {
 
+		$user_roles = array_map( function ( $role_string ) {
+			$wp_role = get_role( $role_string );
+
+			return ucwords( $wp_role->name );
+		}, $this_user_roles );
+		$user_roles = implode( $glue, $user_roles );
+
+		return apply_filters( 'DAILYATTENDANCE/FILTERS/get_user_roles_formatted', $user_roles, $this_user_roles, $glue );
+	}
+}

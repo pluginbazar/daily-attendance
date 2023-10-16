@@ -5,6 +5,121 @@
 
 ?>
 
+<!--
+<form class="relative overflow-hidden bg-white shadow-xl w-[380px] mx-auto mt-20 border border-gray-300 rounded-lg">
+
+     <div aria-hidden="true" class="absolute inset-0 top-8 grid grid-cols-2 -space-x-52 opacity-30">-->
+    <!--        <div class="h-8 bg-gradient-to-br from-primary to-purple-400 blur-[106px]"></div>-->
+    <!--        <div class="h-6 bg-gradient-to-r from-cyan-400 to-sky-300 blur-[106px]"></div>-->
+    <!--    </div>
+
+    <div class="border-b border-gray-300 w-full flex items-center justify-between p-6">
+        <div class="overflow-hidden">
+            <div class="flex items-center abi">
+                <h3 class="text-gray-700 font-medium text-sm overflow-hidden">Cody Fisher</h3>
+                <span class="py-1/2 px-2 bg-green-50 ring-1 ring-green-300 text-green-700 inline-flex items-center ml-2 rounded-full">Admin</span>
+            </div>
+            <p class="text-sm text-gray-400 mt-2">Product Directives Officer</p>
+        </div>
+        <img class="rounded-full w-12 h-12" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60" alt="">
+    </div>
+
+
+    <div class="flex-1 p-6 border-b border-gray-300">
+        <div class="flex items-center justify-between mb-6">
+            <span class="text-sm text-gray-700 font-bold">Activity log</span>
+            <span class="font-normal">27 Sep, 2023 - Wednesday</span>
+        </div>
+
+        <div class="relative px-4 h-[140px] overflow-y-scroll">
+            <div class="absolute h-full border border-dashed border-opacity-20 border-secondary"></div>
+
+            <div class="flex w-full mb-6 -ml-1.5 last:mb-0">
+                <div class="w-1/12 z-10">
+                    <div class="w-3.5 h-3.5 bg-blue-600 rounded-full"></div>
+                </div>
+                <div class="w-11/12 mt-[-4px]">
+                    <p class="text-sm">10:15am - Office In</p>
+                    <p class="text-xs text-gray-500">Starting my day</p>
+                </div>
+            </div>
+
+            <div class="flex w-full mb-6 -ml-1.5 last:mb-0">
+                <div class="w-1/12 z-10">
+                    <div class="w-3.5 h-3.5 bg-blue-600 rounded-full"></div>
+                </div>
+                <div class="w-11/12 mt-[-4px]">
+                    <p class="text-sm">10:15am - Office In</p>
+                    <p class="text-xs text-gray-500">Starting my day</p>
+                </div>
+            </div>
+
+            <div class="flex w-full mb-6 -ml-1.5 last:mb-0">
+                <div class="w-1/12 z-10">
+                    <div class="w-3.5 h-3.5 bg-blue-600 rounded-full"></div>
+                </div>
+                <div class="w-11/12 mt-[-4px]">
+                    <p class="text-sm">10:15am - Office In</p>
+                    <p class="text-xs text-gray-500">Starting my day</p>
+                </div>
+            </div>
+
+            <div class="flex w-full mb-6 -ml-1.5 last:mb-0">
+                <div class="w-1/12 z-10">
+                    <div class="w-3.5 h-3.5 bg-blue-600 rounded-full"></div>
+                </div>
+                <div class="w-11/12 mt-[-4px]">
+                    <p class="text-sm">10:15am - Office In</p>
+                    <p class="text-xs text-gray-500">Starting my day</p>
+                </div>
+            </div>
+
+            <div class="flex w-full mb-6 -ml-1.5 last:mb-0">
+                <div class="w-1/12 z-10">
+                    <div class="w-3.5 h-3.5 bg-blue-600 rounded-full"></div>
+                </div>
+                <div class="w-11/12 mt-[-4px]">
+                    <p class="text-sm">10:15am - Office In</p>
+                    <p class="text-xs text-gray-500">Starting my day</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="p-0 max-w-sm">
+        <div class="p-4 flex flex-col gap-4">
+            <div>
+                <label class="label mb-2 inline-block" for="toolkit">Message (Optional)</label>
+                <input id="toolkit" type="text" class="input ~critical !normal my-1" placeholder="Coffee break...">
+            </div>
+        </div>
+    </div>
+
+    <div class="border-t border-gray-300 w-full">
+        <div class="flex mt-[-1px]">
+            <div class="flex items-center justify-center flex-grow flex-shrink flex-basis-0">
+                <div href="mailto:jennywilson@example.com" class="opacity-30 cursor-pointer flex items-center py-4 text-teal-500 uppercase font-medium text-sm gap-3 justify-center relative border-r border-gray-300 flex-grow flex-shrink flex-basis-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
+                    </svg>
+                    <span>Office In</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-center flex-grow flex-shrink flex-basis-0">
+                <div href="mailto:jennywilson@example.com" class="cursor-pointer flex items-center py-4 text-red-500 uppercase font-medium text-sm gap-3 justify-center relative ml-[-1px] rounded-br-lg flex-grow flex-shrink flex-basis-0">
+                    <span>Office Out</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+-->
+
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 my-4">
     <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
         <div class="flex items-center">

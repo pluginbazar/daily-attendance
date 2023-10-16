@@ -32,32 +32,18 @@
                 <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                     <div class="flex-1 px-3 bg-white divide-y space-y-1">
                         <ul class="space-y-2 pb-2">
-                            <li class="[&_.active]:bg-gray-100">
-                                <div data-target="dashboard" class="active cursor-pointer text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group ">
-                                    <svg class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-                                    </svg>
-                                    <span class="ml-3 flex-1 whitespace-nowrap">Dashboard</span>
-                                </div>
-                            </li>
-                            <li class="[&_.active]:bg-gray-100">
-                                <div data-target="users" class="cursor-pointer text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group ">
-                                    <svg class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
-                                    </svg>
-                                    <span class="ml-3 flex-1 whitespace-nowrap">Staffs / Users</span>
-                                </div>
-                            </li>
-                            <li class="[&_.active]:bg-gray-100">
-                                <div data-target="settings" class="cursor-pointer text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group ">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                              d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                    <span class="ml-3 flex-1 whitespace-nowrap">Settings</span>
-                                </div>
-                            </li>
+
+							<?php foreach ( dailyattendance()->get_panel_menu_items() as $item_key => $item ) : ?>
+
+                                <li class="[&_.active]:bg-gray-100">
+                                    <div data-target="<?= $item_key ?>" class="<?= 'dashboard' == $item_key ? 'active' : ''; ?> cursor-pointer text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group ">
+										<?= $item['icon'] ?? '' ?>
+                                        <span class="ml-3 flex-1 whitespace-nowrap"><?= $item['label'] ?? '' ?></span>
+                                    </div>
+                                </li>
+
+							<?php endforeach; ?>
+
                         </ul>
                         <div class="space-y-2 pt-2">
                             <a href="<?= DAILYATTENDANCE_PLUGIN_DOC_LINK ?>" target="_blank" class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2">
@@ -81,17 +67,13 @@
         <div class="dailyattendance-content-wrap bg-gray-50 relative overflow-y-auto">
             <div class="px-4">
 
-                <div class="dailyattendance-content content-dashboard">
-					<?php include DAILYATTENDANCE_PLUGIN_DIR . 'templates/admin/tab-dashboard.php'; ?>
-                </div>
+				<?php foreach ( dailyattendance()->get_panel_menu_items() as $item_key => $item ) : ?>
 
-                <div class="hidden dailyattendance-content content-users">
-					<?php include DAILYATTENDANCE_PLUGIN_DIR . 'templates/admin/tab-users.php'; ?>
-                </div>
+                    <div class="<?= $item_key != 'dashboard' ? 'hidden' : '' ?> dailyattendance-content content-<?= $item_key ?>">
+						<?php include DAILYATTENDANCE_PLUGIN_DIR . 'templates/admin/tab-' . $item_key . '.php'; ?>
+                    </div>
 
-                <div class="hidden dailyattendance-content content-settings">
-					<?php include DAILYATTENDANCE_PLUGIN_DIR . 'templates/admin/tab-settings.php'; ?>
-                </div>
+				<?php endforeach; ?>
 
             </div>
         </div>

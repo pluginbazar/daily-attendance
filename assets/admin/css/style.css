@@ -13,6 +13,8 @@
 
 .dailyattendance-container {
     width: calc(100% + 20px);
+    position: fixed;
+    left: 180px;
 }
 
 .dailyattendance-topbar {
