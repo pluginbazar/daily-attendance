@@ -139,3 +139,19 @@ if ( ! function_exists( 'dailyattendance_get_user_roles_formatted' ) ) {
 		return apply_filters( 'DAILYATTENDANCE/FILTERS/get_user_roles_formatted', $user_roles, $this_user_roles, $glue );
 	}
 }
+
+
+if ( ! function_exists( 'dailyattendance_render_data_table' ) ) {
+	/**
+	 * Render data table
+	 *
+	 * @param $table_name
+	 * @param $title
+	 * @param $table_data
+	 *
+	 * @return void
+	 */
+	function dailyattendance_render_data_table( $table_name = '', $title = '', $table_data = array() ) {
+		include DAILYATTENDANCE_PLUGIN_DIR . 'templates/components/table.php';
+	}
+}

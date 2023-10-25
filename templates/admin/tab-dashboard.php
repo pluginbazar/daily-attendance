@@ -267,3 +267,53 @@
         </div>
     </div>
 </div>
+
+<?php
+// include DAILYATTENDANCE_PLUGIN_DIR . 'templates/components/modal.php';
+
+    ?>
+
+
+<div class="modal relative z-[99999]" id="modal-website-form" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="modal-bg-overlay"></div>
+    <div class="modal-box-wrap">
+        <div class="modal-box">
+            <form class="modal-content-wrap website-add-form" method="post">
+                <div class="modal-content">
+                    <div class="mt-3 text-center sm:mt-0 sm:text-left">
+                        <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">Add Website</h3>
+                        <p class="notice">Website must be in WordPress CMS. To learn more about this please <a href="#" target="_blank">watch this tutorial</a> now.</p>
+                        <p class="response notice hidden"></p>
+                        <div class="mt-4 space-y-6 space-y-6 bg-white">
+                            <div class="form-control">
+                                <label for="website_label">Website Label</label>
+                                <div class="field-wrap">
+                                    <input type="text" name="website_label" id="website_label" placeholder="My Personal Website" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="form-control">
+                                <label for="website_url">Website URL</label>
+                                <div class="field-wrap">
+                                    <span class="input-prefix">https://</span>
+                                    <input type="text" name="website_url" class="!rounded-none !rounded-r-md" autocomplete="off" id="website_url" placeholder="example.com">
+                                </div>
+                            </div>
+
+                            <div class="form-control">
+                                <label for="secret_key">Secret Key</label>
+                                <div class="field-wrap">
+                                    <input type="text" name="secret_key" id="secret_key" placeholder="c54abec4bd992901c698541fd303852e" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="ml-2"><span class="button">Submit</span></button>
+                    <button type="button" class="cancel"><span class="button outlined">Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
