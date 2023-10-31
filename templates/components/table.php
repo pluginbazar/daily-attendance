@@ -7,9 +7,15 @@ if ( empty( $table_name ) ) {
 	return;
 }
 
-if ( isset( $title ) && ! empty( $title ) ) {
-	printf( '<h3 class="text-xl leading-none font-bold text-gray-900 mb-8">%s</h3>', $title );
-}
+if ( isset( $title ) && ! empty( $title ) ) { ?>
+    <div class="flex justify-between items-center mb-10">
+        <h3 class="text-xl leading-none font-bold text-gray-900"><?php echo $title; ?></h3>
+		<?php if ( $title == 'Staffs' ) { ?>
+            <div id="popup-btn" class="button justify-items-end " type="button">Add Staff</div>
+		<?php } ?>
+    </div>
+
+<?php }
 
 if ( isset( $table_data ) && is_array( $table_data ) && ! empty( $table_data ) ) :?>
 

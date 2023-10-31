@@ -5,7 +5,7 @@
 
 ?>
 
-<div class="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
+<div class="grid grid-cols-1 xl:gap-4 my-4">
     <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
         <h3 class="text-xl leading-none font-bold text-gray-900 mb-8">Designations</h3>
         <div class="block w-full overflow-x-auto">

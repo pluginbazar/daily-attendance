@@ -274,7 +274,7 @@
     ?>
 
 
-<div class="modal relative z-[99999]" id="modal-website-form" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<div class="modal hidden relative z-[99999]" id="modal-website-form" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="modal-bg-overlay"></div>
     <div class="modal-box-wrap">
         <div class="modal-box">

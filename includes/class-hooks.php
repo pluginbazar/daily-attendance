@@ -22,7 +22,6 @@ if ( ! class_exists( 'DAILYATTENDANCE_Hooks' ) ) {
 			add_filter( 'update_footer', '__return_empty_string', 99999 );
 		}
 
-
 		/**
 		 * Render plugin main menu page
 		 *
@@ -70,7 +69,44 @@ if ( ! class_exists( 'DAILYATTENDANCE_Hooks' ) ) {
 				PRIMARY KEY (id)
 	        ) ";
 
+			$sql_designations = "CREATE TABLE IF NOT EXISTS " . DAILYATTENDANCE_DESIGNATIONS_TABLE . " (
+				id int(20) NOT NULL AUTO_INCREMENT,
+				designation_name varchar(128) NOT NULL,
+				designation_status  varchar(256) NOT NULL,
+				datetime datetime NOT NULL,
+				PRIMARY KEY (id)
+	        ) ";
+
+
+			$sql_leave_request = "CREATE TABLE IF NOT EXISTS " . DAILYATTENDANCE_LEAVE_REQUEST_TABLE . " (
+				id int(20) NOT NULL AUTO_INCREMENT,
+				user_id  varchar(128) NOT NULL,
+				title   varchar(256) NOT NULL,
+				description    varchar(256) NOT NULL,
+				status    varchar(256) NOT NULL,
+				date_from  datetime NOT NULL,
+				date_to  datetime NOT NULL,
+				datetime datetime NOT NULL,
+				PRIMARY KEY (id)
+	        ) ";
+
+
+			$sql_holidays = "CREATE TABLE IF NOT EXISTS " . DAILYATTENDANCE_HOLIDAYS_TABLE . " (
+				id int(20) NOT NULL AUTO_INCREMENT,
+				name  varchar(128) NOT NULL,
+				title   varchar(256) NOT NULL,
+				description    varchar(256) NOT NULL,
+				status    varchar(256) NOT NULL,
+				date_from  datetime NOT NULL,
+				date_to  datetime NOT NULL,
+				datetime datetime NOT NULL,
+				PRIMARY KEY (id)
+	        ) ";
+
 			maybe_create_table( DAILYATTENDANCE_DB_TABLE, $sql_create_table );
+			maybe_create_table( DAILYATTENDANCE_DESIGNATIONS_TABLE, $sql_designations );
+			maybe_create_table( DAILYATTENDANCE_LEAVE_REQUEST_TABLE, $sql_leave_request );
+			maybe_create_table( DAILYATTENDANCE_HOLIDAYS_TABLE, $sql_holidays );
 		}
 
 

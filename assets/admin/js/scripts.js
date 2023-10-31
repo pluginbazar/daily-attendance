@@ -37,6 +37,15 @@
         }
     });
 
+    $(document).on('click', '#popup-btn', function () {
+        $('.add-user').removeClass('hidden');
+    });
+
+    $(document).on('click', '.close-popup', function () {
+        $('.add-user').addClass('hidden');
+    });
+
+
 })(jQuery, window, document);
 
 

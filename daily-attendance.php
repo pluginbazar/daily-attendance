@@ -20,6 +20,9 @@ defined( 'DAILYATTENDANCE_PLUGIN_URL' ) || define( 'DAILYATTENDANCE_PLUGIN_URL',
 defined( 'DAILYATTENDANCE_PLUGIN_DIR' ) || define( 'DAILYATTENDANCE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 defined( 'DAILYATTENDANCE_PLUGIN_FILE' ) || define( 'DAILYATTENDANCE_PLUGIN_FILE', plugin_basename( __FILE__ ) );
 defined( 'DAILYATTENDANCE_DB_TABLE' ) || define( 'DAILYATTENDANCE_DB_TABLE', $wpdb->prefix . 'dailyattendance_activity' );
+defined( 'DAILYATTENDANCE_DESIGNATIONS_TABLE' ) || define( 'DAILYATTENDANCE_DESIGNATIONS_TABLE', $wpdb->prefix . 'dailyattendance_designations' );
+defined( 'DAILYATTENDANCE_LEAVE_REQUEST_TABLE' ) || define( 'DAILYATTENDANCE_LEAVE_REQUEST_TABLE', $wpdb->prefix . 'dailyattendance_leave_request' );
+defined( 'DAILYATTENDANCE_HOLIDAYS_TABLE' ) || define( 'DAILYATTENDANCE_HOLIDAYS_TABLE', $wpdb->prefix . 'dailyattendance_holidays' );
 
 defined( 'DAILYATTENDANCE_PLUGIN_LINK' ) || define( 'DAILYATTENDANCE_PLUGIN_LINK', 'https://wordpress.org/plugins/daily-attendance/' );
 defined( 'DAILYATTENDANCE_PLUGIN_DOC_LINK' ) || define( 'DAILYATTENDANCE_PLUGIN_DOC_LINK', 'https://wordpress.org/plugins/daily-attendance/' );
