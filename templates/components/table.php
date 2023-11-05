@@ -9,9 +9,9 @@ if ( empty( $table_name ) ) {
 
 if ( isset( $title ) && ! empty( $title ) ) { ?>
     <div class="flex justify-between items-center mb-10">
-        <h3 class="text-xl leading-none font-bold text-gray-900"><?php echo esc_html__($title,'daily-attendance'); ?></h3>
-		<?php if ( $table_name == 'dailyattendance-table-users' ) { ?>
-            <div id="popup-btn" class="button justify-items-end " type="button"><?php echo esc_html__('Add Staff','daily-attendance'); ?></div>
+        <h3 class="text-xl leading-none font-bold text-gray-900"><?php echo esc_html__( $title, 'daily-attendance' ); ?></h3>
+		<?php if ( $table_name == 'dailyattendance-users' ) { ?>
+            <div id="btn-open-modal" data-target="modal-add-users" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Staff', 'daily-attendance' ); ?></div>
 		<?php } ?>
     </div>
 
@@ -21,7 +21,7 @@ if ( isset( $table_data ) && is_array( $table_data ) && ! empty( $table_data ) )
 
     <div class="block w-full overflow-x-auto">
 
-        <table id="dailyattendance-users" class="w-full stripe" style="width:100%">
+        <table id="<?= $table_name ?>" class="w-full stripe" style="width:100%">
 
 			<?php if ( isset( $table_data['headers'] ) && is_array( $table_data['headers'] ) && ! empty( $table_data['headers'] ) ) : ?>
                 <thead>
@@ -48,7 +48,6 @@ if ( isset( $table_data ) && is_array( $table_data ) && ! empty( $table_data ) )
 				<?php endforeach; ?>
                 </tbody>
 			<?php endif; ?>
-
 
         </table>
 

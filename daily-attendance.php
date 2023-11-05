@@ -53,6 +53,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Main' ) ) {
 			require_once( DAILYATTENDANCE_PLUGIN_DIR . 'includes/class-functions.php' );
 			require_once( DAILYATTENDANCE_PLUGIN_DIR . 'includes/class-hooks.php' );
 			require_once( DAILYATTENDANCE_PLUGIN_DIR . 'includes/class-rest-api.php' );
+			require_once( DAILYATTENDANCE_PLUGIN_DIR . 'includes/class-ajax.php' );
 		}
 
 

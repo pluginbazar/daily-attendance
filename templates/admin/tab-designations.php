@@ -106,7 +106,7 @@
             </table>
 
 
-            <table id="dailyattendance-users" class="w-full stripe" style="width:100%">
+            <table id="dailyattendance-designations" class="w-full stripe" style="width:100%">
                 <thead>
                 <tr>
                     <th>Name</th>
