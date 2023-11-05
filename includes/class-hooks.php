@@ -20,6 +20,41 @@ if ( ! class_exists( 'DAILYATTENDANCE_Hooks' ) ) {
 			add_action( 'admin_menu', array( $this, 'add_plugin_menu_page' ) );
 			add_filter( 'admin_footer_text', '__return_empty_string' );
 			add_filter( 'update_footer', '__return_empty_string', 99999 );
+			add_action( 'wp_ajax_create_user', array( $this, 'add_staff' ) );
+		}
+
+		function add_staff(){
+
+			$lastname = '';
+
+			$_form_data = $_POST['form_data'] ?? '';
+			parse_str($_form_data, $form_data);
+
+			$user_name = $form_data['user_name'];
+			$full_name = $form_data['full_name'];
+			$email = $form_data['email'];
+			$pass = $form_data['password'];
+
+
+			$name = explode(' ',$full_name);
+			$lastname = end($name);
+			$remove_last_el= array_pop($name );
+			$firstname = implode(' ',$name);
+
+			if ( ! empty( $user_name ) && ! empty( $email ) && ! empty( $firstname ) && ! empty( $lastname ) && ! empty( $pass ) ) {
+				if ( username_exists( $firstname ) == null && email_exists( $email ) == false ) {
+					$user_id            = wp_create_user( $user_name, $pass, $email );
+					$args               = array();
+					$args['ID']         = $user_id;
+					$args['first_name'] = esc_html__( $firstname, 'daily-attendance' );
+					$args['last_name']  = esc_html__( $lastname, 'daily-attendance' );
+					$update_user = wp_update_user( $args );
+
+					if(is_int($update_user)){
+						wp_send_json_success($html);
+					}
+				}
+			}
 		}
 
 		/**

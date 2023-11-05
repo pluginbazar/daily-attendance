@@ -9,9 +9,9 @@ if ( empty( $table_name ) ) {
 
 if ( isset( $title ) && ! empty( $title ) ) { ?>
     <div class="flex justify-between items-center mb-10">
-        <h3 class="text-xl leading-none font-bold text-gray-900"><?php echo $title; ?></h3>
-		<?php if ( $title == 'Staffs' ) { ?>
-            <div id="popup-btn" class="button justify-items-end " type="button">Add Staff</div>
+        <h3 class="text-xl leading-none font-bold text-gray-900"><?php echo esc_html__($title,'daily-attendance'); ?></h3>
+		<?php if ( $table_name == 'dailyattendance-table-users' ) { ?>
+            <div id="popup-btn" class="button justify-items-end " type="button"><?php echo esc_html__('Add Staff','daily-attendance'); ?></div>
 		<?php } ?>
     </div>
 

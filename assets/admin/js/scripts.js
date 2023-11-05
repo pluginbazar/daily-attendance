@@ -1,6 +1,14 @@
 (function ($, window, document) {
     "use strict";
 
+    // let dailyattendance_load_users_table = () => {
+    // write ajax call
+    /**
+     * ajax: dailyattendance_render_data_table() send output of this function
+     *
+     * success: put the output in the wrapper
+     */
+    // };
 
     $(document).on('click', '.dailyattendance-sidebar ul > li', function () {
         let users_table, el_dailyattendance_container = $('.dailyattendance-container'),
@@ -38,11 +46,33 @@
     });
 
     $(document).on('click', '#popup-btn', function () {
-        $('.add-user').removeClass('hidden');
+        $('.add-staff-form').removeClass('hidden');
     });
 
     $(document).on('click', '.close-popup', function () {
-        $('.add-user').addClass('hidden');
+        $('.add-staff-form').addClass('hidden');
+    });
+
+
+    $(".modal-form").on("submit", function (event) {
+        var thisButton = $(this);
+        var data = thisButton.serialize();
+
+        $.ajax({
+            type: "post",
+            url: ajaxurl,
+            data: {
+                'action': 'create_user',
+                'form_data': data,
+            },
+
+            success:function (response){
+                $('#dailyattendance-users').load( location.href + " #dailyattendance-users");
+            }
+
+        });
+
+        event.preventDefault();
     });
 
 

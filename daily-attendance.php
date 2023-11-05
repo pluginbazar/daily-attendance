@@ -71,7 +71,14 @@ if ( ! class_exists( 'DAILYATTENDANCE_Main' ) ) {
 
 				wp_enqueue_style( 'dailyattendance-style', DAILYATTENDANCE_PLUGIN_URL . 'assets/admin/css/style.css', [], time() );
 				wp_enqueue_script( 'dailyattendance-scripts', DAILYATTENDANCE_PLUGIN_URL . 'assets/admin/js/scripts.js', [ 'jquery' ], time(), true );
+				wp_localize_script( 'ajax-script', 'pluginObject', $this->localize_scripts() );
 			}
+		}
+
+		function localize_scripts() {
+			return apply_filters( 'daily_attendance_filters_localize_scripts', array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			) );
 		}
 
 
