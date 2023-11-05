@@ -105,12 +105,13 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			$user_name     = $form_data['user_name'] ?? '';
 			$full_name     = $form_data['full_name'] ?? '';
 			$email         = $form_data['email'] ?? '';
+			$designation   = $form_data['designation'] ?? '';
 			$password      = $form_data['password'] ?? '';
 			$full_name_arr = explode( ' ', trim( $full_name ) );
 			$lastname      = $full_name_arr[ count( $full_name_arr ) - 1 ] ?? '';
 			$firstname     = str_replace( $lastname, '', $full_name );
 
-			if ( empty( $user_name ) || empty( $email ) || empty( $firstname ) || empty( $lastname ) || empty( $password ) ) {
+			if ( empty( $user_name ) || empty( $email ) || empty( $firstname ) || empty( $lastname ) || empty( $designation ) || empty( $password ) ) {
 				wp_send_json_error( [ 'message' => esc_html__( 'Missing required data.', 'daily-attendance' ) ] );
 			}
 
@@ -136,7 +137,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 				)
 			);
 
-//			update_user_meta($user_id, 'designation', $designation );
+			update_user_meta( $user_id, 'designation', $designation );
 
 			if ( is_wp_error( $update_user ) ) {
 				wp_send_json_error( [ 'message' => $update_user->get_error_message() ] );

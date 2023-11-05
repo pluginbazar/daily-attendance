@@ -9,6 +9,7 @@
     <div class="dailyattendance-users-wrap bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8"></div>
 </div>
 
+<?php $designations = dailyattendance()->get_designations(); ?>
 
 <div class="modal hidden relative z-[99999]" id="modal-add-users" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="modal-bg-overlay"></div>
@@ -36,6 +37,19 @@
                                 <label for="email"><?php echo esc_html__( 'Email *', 'daily-attendance' ); ?></label>
                                 <div class="field-wrap mt-2">
                                     <input type="email" name="email" id="email" placeholder="name@gmail.com" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-control">
+                                <label for="designation"><?php echo esc_html__( 'Designation', 'daily-attendance' ); ?></label>
+                                <div class="field-wrap mt-2">
+                                    <select name="designation" id="designation">
+                                        <option value=""><?php echo esc_html__( 'Choose...', 'daily-attendance' ); ?></option>
+										<?php if ( is_array( $designations ) ):
+											foreach ( $designations as $designation ): ?>
+                                                <option value="<?php echo esc_attr( $designation['designation_name'] ); ?>"><?php echo esc_html__( $designation['designation_name'], 'daily-attendance' ); ?></option>
+											<?php endforeach; ?>
+										<?php endif; ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-control">
