@@ -2,59 +2,60 @@
     "use strict";
 
     let dailyattendance_load_users_table = () => {
-        $.ajax({
-            type: "post",
-            url: ajaxurl,
-            data: {
-                'action': 'load_users_table'
-            },
-            success: function (response) {
-                if (response.success) {
-                    $('.dailyattendance-users-wrap').html(response.data);
+            $.ajax({
+                type: "post",
+                url: ajaxurl,
+                data: {
+                    'action': 'load_users_table'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('.dailyattendance-users-wrap').html(response.data);
 
-                    new DataTable('#dailyattendance-users', {
-                        "scrollY": 360,
-                        "retrieve": true,
-                        "paging": false,
-                        "ordering": false,
-                        "language": {
-                            "lengthMenu": "Displaying _MENU_ Users",
-                            "search": "Search Users  "
-                        }
-                    });
-                } else {
-                    console.log(response);
+                        new DataTable('#dailyattendance-users', {
+                            "scrollY": 360,
+                            "retrieve": true,
+                            "paging": false,
+                            "ordering": false,
+                            "language": {
+                                "lengthMenu": "Displaying _MENU_ Users",
+                                "search": "Search Users  "
+                            }
+                        });
+                    } else {
+                        console.log(response);
+                    }
                 }
-            }
-        });
-    };
-    let dailyattendance_load_designations_table = () => {
-        $.ajax({
-            type: "post",
-            url: ajaxurl,
-            data: {
-                'action': 'load_designations_table'
-            },
-            success: function (response) {
-                if (response.success) {
-                    $('.dailyattendance-designations-wrap').html(response.data);
+            });
+        },
+        dailyattendance_load_designations_table = () => {
+            $.ajax({
+                type: 'POST',
+                url: ajaxurl,
+                data: {
+                    'action': 'load_designations_table'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('.dailyattendance-designations-wrap').html(response.data);
 
-                    new DataTable('#dailyattendance_designations', {
-                        "scrollY": 360,
-                        "retrieve": true,
-                        "paging": false,
-                        "ordering": false,
-                        "language": {
-                            "lengthMenu": "Displaying _MENU_ Users",
-                            "search": "Search Users  "
-                        }
-                    });
-                } else {
-                    console.log(response);
+                        new DataTable('#dailyattendance-designations', {
+                            "scrollY": 360,
+                            "retrieve": true,
+                            "paging": false,
+                            "ordering": false,
+                            "searching": false,
+                            "language": {
+                                "lengthMenu": "Displaying _MENU_ Users",
+                                "search": "Search Users  "
+                            }
+                        });
+                    } else {
+                        console.log(response);
+                    }
                 }
-            }
-        });
-    };
+            });
+        };
 
     $(document).on('click', '.dailyattendance-sidebar ul > li', function () {
         let users_table, el_dailyattendance_container = $('.dailyattendance-container'),
@@ -68,6 +69,7 @@
             return;
         }
 
+        el_dailyattendance_container.removeClass('table-rendered');
         this_nav_item_wrap.parent().find('> li > div').removeClass('active');
         this_nav_item.addClass('active');
 
@@ -78,6 +80,8 @@
             dailyattendance_load_users_table();
             el_dailyattendance_container.addClass('table-rendered');
         }
+
+        console.log(target_content);
 
         if ('designations' === target_content && !el_dailyattendance_container.hasClass('table-rendered')) {
             dailyattendance_load_designations_table();

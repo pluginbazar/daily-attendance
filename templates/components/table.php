@@ -7,20 +7,24 @@ if ( empty( $table_name ) ) {
 	return;
 }
 
-if ( isset( $title ) && ! empty( $title ) ) { ?>
+if ( isset( $title ) && ! empty( $title ) ) : ?>
+
     <div class="flex justify-between items-center mb-10">
         <h3 class="text-xl leading-none font-bold text-gray-900"><?php echo esc_html__( $title, 'daily-attendance' ); ?></h3>
+
 		<?php if ( $table_name == 'dailyattendance-users' ): ?>
             <div id="btn-open-modal" data-target="modal-add-users" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Staff', 'daily-attendance' ); ?></div>
-		<?php endif;
-	    if ( $table_name == 'dailyattendance_designations' ): ?>
+		<?php endif; ?>
+
+		<?php if ( $table_name == 'dailyattendance-designations' ): ?>
             <div id="btn-open-modal" data-target="modal-add-designations" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Designation', 'daily-attendance' ); ?></div>
-	    <?php endif; ?>
+		<?php endif; ?>
     </div>
 
-<?php }
+<?php endif; ?>
 
-if ( isset( $table_data ) && is_array( $table_data ) && ! empty( $table_data ) ) :?>
+
+<?php if ( isset( $table_data ) && is_array( $table_data ) && ! empty( $table_data ) ) : ?>
 
     <div class="block w-full overflow-x-auto">
 

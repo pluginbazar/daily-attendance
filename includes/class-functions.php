@@ -32,10 +32,13 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 		}
 
 
-//		function get_designations(){
-//			global $wpdb;
-//
-//		}
+		function get_designations() {
+			global $wpdb;
+
+			return $wpdb->get_results( 'SELECT id,designation_name,designation_status FROM ' . DAILYATTENDANCE_DESIGNATIONS_TABLE, ARRAY_A );
+		}
+
+
 		/**
 		 * Return users as array
 		 *
@@ -111,7 +114,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
                                 </svg>',
 					'template' => DAILYATTENDANCE_PLUGIN_DIR . 'templates/admin/tab-holidays.php',
 				),
-				'settings'     => array(
+				'settings'      => array(
 					'label'    => esc_html__( 'Settings', 'daily-attendance' ),
 					'icon'     => '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 	                                <path stroke-linecap="round" stroke-linejoin="round"

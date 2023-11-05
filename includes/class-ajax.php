@@ -19,20 +19,18 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 		}
 
 		function load_designations_table() {
-			$designation = dailyattendance()->get_designations();
-
-			$table_data = array(
+			$designations = dailyattendance()->get_designations();
+			$table_data   = array(
 				'headers' => array(
-					'id'          => esc_html__( 'ID', 'daily-attendance' ),
-					'designation' => esc_html__( 'Designation', 'daily-attendance' ),
-					'status'      => esc_html__( 'Status', 'daily-attendance' ),
-					'added_on'    => esc_html__( 'Joined', 'daily-attendance' ),
+					'id'                 => esc_html__( 'ID', 'daily-attendance' ),
+					'designation_name'   => esc_html__( 'Designation Name', 'daily-attendance' ),
+					'designation_status' => esc_html__( 'Status', 'daily-attendance' ),
 				),
-				'body'    => $designation,
+				'body'    => $designations,
 			);
 
 			ob_start();
-			dailyattendance_render_data_table( 'dailyattendance_designations', 'Designation', $table_data );
+			dailyattendance_render_data_table( 'dailyattendance-designations', 'Designation', $table_data );
 			$table_content = ob_get_clean();
 
 			wp_send_json_success( $table_content );
@@ -44,23 +42,26 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 		function add_designations() {
 
 			global $wpdb;
+
 			$_form_data = $_POST['designation'] ?? '';
 			parse_str( $_form_data, $form_data );
+
 			$designation = $form_data['designation'] ?? '';
 
-			if(empty($designation)){
+			if ( empty( $designation ) ) {
 				wp_send_json_error( [ 'message' => esc_html__( 'Missing required data.', 'daily-attendance' ) ] );
 			}
 
 			$insert = $wpdb->insert( DAILYATTENDANCE_DESIGNATIONS_TABLE, array(
 				'designation_name'   => $designation,
-				'designation_status' => 'pending',
+				'designation_status' => 'active',
 			) );
 
-			if ( $insert ) {
-				wp_send_json_success( $insert );
-
+			if ( ! $insert ) {
+				wp_send_json_error( [ 'message' => $wpdb->last_error ] );
 			}
+
+			wp_send_json_success( $insert );
 		}
 
 		/**
@@ -134,6 +135,8 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 					'last_name'  => $lastname,
 				)
 			);
+
+//			update_user_meta($user_id, 'designation', $designation );
 
 			if ( is_wp_error( $update_user ) ) {
 				wp_send_json_error( [ 'message' => $update_user->get_error_message() ] );
