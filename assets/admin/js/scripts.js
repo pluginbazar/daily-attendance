@@ -14,6 +14,35 @@
 
                     new DataTable('#dailyattendance-users', {
                         "scrollY": 360,
+                        "retrieve": true,
+                        "paging": false,
+                        "ordering": false,
+                        "language": {
+                            "lengthMenu": "Displaying _MENU_ Users",
+                            "search": "Search Users  "
+                        }
+                    });
+                } else {
+                    console.log(response);
+                }
+            }
+        });
+    };
+    let dailyattendance_load_designations_table = () => {
+        $.ajax({
+            type: "post",
+            url: ajaxurl,
+            data: {
+                'action': 'load_designations_table'
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('.dailyattendance-designations-wrap').html(response.data);
+
+                    new DataTable('#dailyattendance_designations', {
+                        "scrollY": 360,
+                        "retrieve": true,
+                        "paging": false,
                         "ordering": false,
                         "language": {
                             "lengthMenu": "Displaying _MENU_ Users",
@@ -49,6 +78,11 @@
             dailyattendance_load_users_table();
             el_dailyattendance_container.addClass('table-rendered');
         }
+
+        if ('designations' === target_content && !el_dailyattendance_container.hasClass('table-rendered')) {
+            dailyattendance_load_designations_table();
+            el_dailyattendance_container.addClass('table-rendered');
+        }
     });
 
     $('#modal-add-users form.modal-form').on('submit', function (e) {
@@ -70,6 +104,24 @@
         return false;
     });
 
+    $('#modal-add-designations form.modal-form').on('submit', function (e) {
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: {
+                'action': 'add_designations',
+                'designation': $(this).serialize(),
+            },
+            success: function (response) {
+                if (response.success) {
+                    dailyattendance_load_designations_table();
+                    $('#modal-add-designations').addClass('hidden');
+                }
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
 
 
     $(document).on('click', '#btn-open-modal', function () {
@@ -79,6 +131,11 @@
     $(document).on('click', '#btn-close-modal', function () {
         $('#' + $(this).data('target')).addClass('hidden');
     });
+
+    $(document).on('click', '#modal-add-designations #btn-close-modal', function () {
+        $('#modal-add-designations').addClass('hidden');
+    });
+
 })(jQuery, window, document);
 
 

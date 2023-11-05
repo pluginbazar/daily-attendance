@@ -10,9 +10,12 @@ if ( empty( $table_name ) ) {
 if ( isset( $title ) && ! empty( $title ) ) { ?>
     <div class="flex justify-between items-center mb-10">
         <h3 class="text-xl leading-none font-bold text-gray-900"><?php echo esc_html__( $title, 'daily-attendance' ); ?></h3>
-		<?php if ( $table_name == 'dailyattendance-users' ) { ?>
+		<?php if ( $table_name == 'dailyattendance-users' ): ?>
             <div id="btn-open-modal" data-target="modal-add-users" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Staff', 'daily-attendance' ); ?></div>
-		<?php } ?>
+		<?php endif;
+	    if ( $table_name == 'dailyattendance_designations' ): ?>
+            <div id="btn-open-modal" data-target="modal-add-designations" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Designation', 'daily-attendance' ); ?></div>
+	    <?php endif; ?>
     </div>
 
 <?php }

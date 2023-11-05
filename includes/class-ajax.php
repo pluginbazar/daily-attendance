@@ -14,9 +14,58 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 		function __construct() {
 			add_action( 'wp_ajax_create_user', array( $this, 'create_user' ) );
 			add_action( 'wp_ajax_load_users_table', array( $this, 'load_users_table' ) );
+			add_action( 'wp_ajax_add_designations', array( $this, 'add_designations' ) );
+			add_action( 'wp_ajax_load_designations_table', array( $this, 'load_designations_table' ) );
 		}
 
+		function load_designations_table() {
+			$designation = dailyattendance()->get_designations();
 
+			$table_data = array(
+				'headers' => array(
+					'id'          => esc_html__( 'ID', 'daily-attendance' ),
+					'designation' => esc_html__( 'Designation', 'daily-attendance' ),
+					'status'      => esc_html__( 'Status', 'daily-attendance' ),
+					'added_on'    => esc_html__( 'Joined', 'daily-attendance' ),
+				),
+				'body'    => $designation,
+			);
+
+			ob_start();
+			dailyattendance_render_data_table( 'dailyattendance_designations', 'Designation', $table_data );
+			$table_content = ob_get_clean();
+
+			wp_send_json_success( $table_content );
+		}
+
+		/**
+		 * @return void
+		 */
+		function add_designations() {
+
+			global $wpdb;
+			$_form_data = $_POST['designation'] ?? '';
+			parse_str( $_form_data, $form_data );
+			$designation = $form_data['designation'] ?? '';
+
+			if(empty($designation)){
+				wp_send_json_error( [ 'message' => esc_html__( 'Missing required data.', 'daily-attendance' ) ] );
+			}
+
+			$insert = $wpdb->insert( DAILYATTENDANCE_DESIGNATIONS_TABLE, array(
+				'designation_name'   => $designation,
+				'designation_status' => 'pending',
+			) );
+
+			if ( $insert ) {
+				wp_send_json_success( $insert );
+
+			}
+		}
+
+		/**
+		 * @return void
+		 */
 		function load_users_table() {
 			$users_list = dailyattendance()->get_users();
 			$users_list = array_map( function ( $user_data ) {
@@ -44,7 +93,9 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			wp_send_json_success( $table_content );
 		}
 
-
+		/**
+		 * @return void
+		 */
 		function create_user() {
 
 			$_form_data = $_POST['form_data'] ?? '';

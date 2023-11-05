@@ -32,6 +32,10 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 		}
 
 
+//		function get_designations(){
+//			global $wpdb;
+//
+//		}
 		/**
 		 * Return users as array
 		 *

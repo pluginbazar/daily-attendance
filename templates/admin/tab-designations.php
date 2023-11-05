@@ -6,133 +6,34 @@
 ?>
 
 <div class="grid grid-cols-1 xl:gap-4 my-4">
-    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
-        <h3 class="text-xl leading-none font-bold text-gray-900 mb-8">Designations</h3>
-        <div class="block w-full overflow-x-auto">
-            <table class="hidden items-center w-full bg-transparent border-collapse">
-                <thead>
-                <tr>
-                    <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Top Channels</th>
-                    <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Users</th>
-                    <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap min-w-140-px"></th>
-                </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                <tr class="text-gray-500">
-                    <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Organic Search</th>
-                    <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">5,649</td>
-                    <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-xs font-medium">30%</span>
-                            <div class="relative w-full">
-                                <div class="w-full bg-gray-200 rounded-sm h-2">
-                                    <div class="bg-cyan-600 h-2 rounded-sm" style="width: 30%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="text-gray-500">
-                    <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Referral</th>
-                    <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">4,025</td>
-                    <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-xs font-medium">24%</span>
-                            <div class="relative w-full">
-                                <div class="w-full bg-gray-200 rounded-sm h-2">
-                                    <div class="bg-orange-300 h-2 rounded-sm" style="width: 24%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="text-gray-500">
-                    <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Direct</th>
-                    <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">3,105</td>
-                    <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-xs font-medium">18%</span>
-                            <div class="relative w-full">
-                                <div class="w-full bg-gray-200 rounded-sm h-2">
-                                    <div class="bg-teal-400 h-2 rounded-sm" style="width: 18%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="text-gray-500">
-                    <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Social</th>
-                    <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">1251</td>
-                    <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-xs font-medium">12%</span>
-                            <div class="relative w-full">
-                                <div class="w-full bg-gray-200 rounded-sm h-2">
-                                    <div class="bg-pink-600 h-2 rounded-sm" style="width: 12%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="text-gray-500">
-                    <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Other</th>
-                    <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">734</td>
-                    <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-xs font-medium">9%</span>
-                            <div class="relative w-full">
-                                <div class="w-full bg-gray-200 rounded-sm h-2">
-                                    <div class="bg-indigo-600 h-2 rounded-sm" style="width: 9%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="text-gray-500">
-                    <th class="border-t-0 align-middle text-sm font-normal whitespace-nowrap p-4 pb-0 text-left">Email</th>
-                    <td class="border-t-0 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4 pb-0">456</td>
-                    <td class="border-t-0 align-middle text-xs whitespace-nowrap p-4 pb-0">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-xs font-medium">7%</span>
-                            <div class="relative w-full">
-                                <div class="w-full bg-gray-200 rounded-sm h-2">
-                                    <div class="bg-purple-500 h-2 rounded-sm" style="width: 7%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+    <div class="dailyattendance-designations-wrap bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8"></div>
+</div>
 
-
-            <table id="dailyattendance-designations" class="w-full stripe" style="width:100%">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email Address</th>
-                    <th>Roles</th>
-                    <th>Secret Key</th>
-                    <th>Joined</th>
-                </tr>
-                </thead>
-                <tbody>
-				<?php foreach ( dailyattendance()->get_users() as $user_info ) : ?>
-                    <tr>
-                        <td><?= $user_info['name'] ?? '' ?></td>
-                        <td><?= $user_info['email'] ?? '' ?></td>
-                        <td><?= $user_info['roles'] ?? '' ?></td>
-                        <td>
-                            <span id="user-secret-key" aria-label="Copy Code" class="hint--top hint--rounded bg-gray-100 border border-gray-300 px-2 py-2 rounded-md text-gray-700 cursor-pointer w-[280px] block text-center">
-                                <span><?= $user_info['secret_key'] ?? '' ?></span>
-                            </span>
-                        </td>
-                        <td><?= $user_info['added_on'] ?? '' ?></td>
-                    </tr>
-				<?php endforeach; ?>
-                </tbody>
-            </table>
-
+<div class="modal hidden relative z-[99999]" id="modal-add-designations" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="modal-bg-overlay"></div>
+    <div class="modal-box-wrap">
+        <div class="modal-box">
+            <div class="modal-content w-full max-w-md max-h-full rounded">
+                <p class="text-2xl font-bold text-left"><?php echo esc_html__( 'Add Designation', 'daily-attendance' ); ?></p>
+                <form class="modal-content-wrap modal-form" method="post">
+                    <div class="mt-3 text-center sm:mt-0 sm:text-left">
+                        <p class="response notice hidden"></p>
+                        <div class="mt-4 space-y-6 space-y-6 bg-white">
+                            <div class="form-control">
+                                <label for="designation"><?php echo esc_html__( 'Designation', 'daily-attendance' ); ?></label>
+                                <div class="field-wrap mt-2">
+                                    <input type="text" name="designation" id="designation" placeholder="Designation" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-3">
+                        <button type="submit" name="submission" class="ml-2 button submit-form" value="yes"><?php echo esc_html__( 'Submit', 'daily-attendance' ); ?></button>
+                        <span id="btn-close-modal" data-target="modal-add-users" class="pt-2 text-red-600 cursor-pointer mr-3 text-sm"><?php echo esc_html__( 'Cancel', 'daily-attendance' ); ?></span>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
