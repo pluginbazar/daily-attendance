@@ -19,6 +19,10 @@ if ( isset( $title ) && ! empty( $title ) ) : ?>
 		<?php if ( $table_name == 'dailyattendance-designations' ): ?>
             <div id="btn-open-modal" data-target="modal-add-designations" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Designation', 'daily-attendance' ); ?></div>
 		<?php endif; ?>
+
+	    <?php if ( $table_name == 'dailyattendance-leave-request' ): ?>
+            <div id="btn-open-modal" data-target="modal-add-leave-request" class="button justify-items-end" type="button"><?php echo esc_html__( 'Leave', 'daily-attendance' ); ?></div>
+	    <?php endif; ?>
     </div>
 
 <?php endif; ?>

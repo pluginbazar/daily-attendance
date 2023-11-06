@@ -55,6 +55,34 @@
                     }
                 }
             });
+        },
+        dailyattendance_load_leave_request_table = ()   => {
+            $.ajax({
+                type: 'POST',
+                url: ajaxurl,
+                data: {
+                    'action': 'load_leave_request_table'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('.dailyattendance-leave-request-wrap').html(response.data);
+
+                        new DataTable('#dailyattendance-leave-request', {
+                            "scrollY": 360,
+                            "retrieve": true,
+                            "paging": false,
+                            "ordering": false,
+                            "searching": false,
+                            "language": {
+                                "lengthMenu": "Displaying _MENU_ Users",
+                                "search": "Search Users  "
+                            }
+                        });
+                    } else {
+                        console.log(response);
+                    }
+                }
+            });
         };
 
     $(document).on('click', '.dailyattendance-sidebar ul > li', function () {
@@ -85,6 +113,11 @@
 
         if ('designations' === target_content && !el_dailyattendance_container.hasClass('table-rendered')) {
             dailyattendance_load_designations_table();
+            el_dailyattendance_container.addClass('table-rendered');
+        }
+
+        if ('leave_request' === target_content && !el_dailyattendance_container.hasClass('table-rendered')) {
+            dailyattendance_load_leave_request_table();
             el_dailyattendance_container.addClass('table-rendered');
         }
     });
@@ -137,6 +170,10 @@
     });
 
     $(document).on('click', '#modal-add-designations #btn-close-modal', function () {
+        $('#modal-add-designations').addClass('hidden');
+    });
+
+    $(document).on('click', '#modal-add-leave-request #btn-close-modal', function () {
         $('#modal-add-designations').addClass('hidden');
     });
 

@@ -31,7 +31,18 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 			return $signature_key;
 		}
 
+		/**
+		 * @return array|object|stdClass[]|null
+		 */
+		function get_leave_request() {
+			global $wpdb;
 
+			return $wpdb->get_results( 'SELECT user_id,title,description,status, DATEDIFF(date_to,date_from) as dates,datetime FROM ' . DAILYATTENDANCE_LEAVE_REQUEST_TABLE, ARRAY_A );
+		}
+
+		/**
+		 * @return array|object|stdClass[]|null
+		 */
 		function get_designations() {
 			global $wpdb;
 
@@ -59,16 +70,16 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 //				delete_user_meta( $wp_user->ID, 'secret_key' );
 
 				$user_secret_key = get_user_meta( $wp_user->ID, 'secret_key', true );
-				$designation = get_user_meta( $wp_user->ID, 'designation', true );
+				$designation     = get_user_meta( $wp_user->ID, 'designation', true );
 				$user_secret_key = empty( $user_secret_key ) ? hash( 'md5', $wp_user->user_email . current_time( 'U' ) ) : $user_secret_key;
 				$all_users[]     = array(
-					'id'         => $wp_user->ID,
-					'name'       => sprintf( '<a class="font-medium underline focus:outline-none focus:shadow-none focus:ring-0" href="%s" target="_blank">#%s - %s</a>', admin_url( 'user-edit.php?user_id=' . $wp_user->ID ), $wp_user->ID, $wp_user->display_name ),
-					'email'      => $wp_user->user_email,
-					'roles'      => dailyattendance_get_user_roles_formatted( $wp_user->roles ),
+					'id'          => $wp_user->ID,
+					'name'        => sprintf( '<a class="font-medium underline focus:outline-none focus:shadow-none focus:ring-0" href="%s" target="_blank">#%s - %s</a>', admin_url( 'user-edit.php?user_id=' . $wp_user->ID ), $wp_user->ID, $wp_user->display_name ),
+					'email'       => $wp_user->user_email,
+					'roles'       => dailyattendance_get_user_roles_formatted( $wp_user->roles ),
 					'designation' => $designation,
-					'secret_key' => $user_secret_key,
-					'added_on'   => date( 'jS M Y, g:ia', strtotime( $wp_user->user_registered ) ),
+					'secret_key'  => $user_secret_key,
+					'added_on'    => date( 'jS M Y, g:ia', strtotime( $wp_user->user_registered ) ),
 				);
 
 				update_user_meta( $wp_user->ID, 'secret_key', $user_secret_key );

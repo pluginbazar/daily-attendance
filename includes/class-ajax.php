@@ -16,8 +16,34 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			add_action( 'wp_ajax_load_users_table', array( $this, 'load_users_table' ) );
 			add_action( 'wp_ajax_add_designations', array( $this, 'add_designations' ) );
 			add_action( 'wp_ajax_load_designations_table', array( $this, 'load_designations_table' ) );
+			add_action( 'wp_ajax_load_leave_request_table', array( $this, 'load_leave_request_table' ) );
 		}
 
+		function load_leave_request_table() {
+			$leave_request = dailyattendance()->get_leave_request();
+			$table_data    = array(
+				'headers' => array(
+					'user_id'     => esc_html__( 'User ID', 'daily-attendance' ),
+					'title'       => esc_html__( 'Title', 'daily-attendance' ),
+					'description' => esc_html__( 'Description', 'daily-attendance' ),
+					'status'      => esc_html__( 'Status', 'daily-attendance' ),
+					'dates'       => esc_html__( 'Dates', 'daily-attendance' ),
+					'datetime'    => esc_html__( 'Submitted', 'daily-attendance' ),
+				),
+				'body'    => $leave_request,
+			);
+
+			ob_start();
+			dailyattendance_render_data_table( 'dailyattendance-leave-request', 'Leave Request', $table_data );
+			$table_content = ob_get_clean();
+
+			wp_send_json_success( $table_content );
+
+		}
+
+		/**
+		 * @return void
+		 */
 		function load_designations_table() {
 			$designations = dailyattendance()->get_designations();
 			$table_data   = array(
@@ -77,13 +103,13 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			}, $users_list );
 			$table_data = array(
 				'headers' => array(
-					'id'         => esc_html__( 'ID', 'daily-attendance' ),
-					'name'       => esc_html__( 'Name', 'daily-attendance' ),
-					'email'      => esc_html__( 'Email Address', 'daily-attendance' ),
-					'roles'      => esc_html__( 'Roles', 'daily-attendance' ),
-					'designation'      => esc_html__( 'Designation', 'daily-attendance' ),
-					'secret_key' => esc_html__( 'Secret Key', 'daily-attendance' ),
-					'added_on'   => esc_html__( 'Joined', 'daily-attendance' ),
+					'id'          => esc_html__( 'ID', 'daily-attendance' ),
+					'name'        => esc_html__( 'Name', 'daily-attendance' ),
+					'email'       => esc_html__( 'Email Address', 'daily-attendance' ),
+					'roles'       => esc_html__( 'Roles', 'daily-attendance' ),
+					'designation' => esc_html__( 'Designation', 'daily-attendance' ),
+					'secret_key'  => esc_html__( 'Secret Key', 'daily-attendance' ),
+					'added_on'    => esc_html__( 'Joined', 'daily-attendance' ),
 				),
 				'body'    => $users_list,
 			);
