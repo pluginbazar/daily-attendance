@@ -81,6 +81,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 					'name'       => esc_html__( 'Name', 'daily-attendance' ),
 					'email'      => esc_html__( 'Email Address', 'daily-attendance' ),
 					'roles'      => esc_html__( 'Roles', 'daily-attendance' ),
+					'designation'      => esc_html__( 'Designation', 'daily-attendance' ),
 					'secret_key' => esc_html__( 'Secret Key', 'daily-attendance' ),
 					'added_on'   => esc_html__( 'Joined', 'daily-attendance' ),
 				),
