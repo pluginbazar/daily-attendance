@@ -70,6 +70,9 @@ if ( ! class_exists( 'DAILYATTENDANCE_Main' ) ) {
 				wp_enqueue_style( 'dailyattendance-datatables', DAILYATTENDANCE_PLUGIN_URL . 'assets/admin/css/datatables.min.css' );
 				wp_enqueue_script( 'dailyattendance-datatables', DAILYATTENDANCE_PLUGIN_URL . 'assets/admin/js/datatables.min.js', [ 'jquery' ] );
 
+				wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
+				wp_enqueue_script('jquery-ui-datepicker');
+
 				wp_enqueue_style( 'dailyattendance-style', DAILYATTENDANCE_PLUGIN_URL . 'assets/admin/css/style.css', [], time() );
 				wp_enqueue_script( 'dailyattendance-scripts', DAILYATTENDANCE_PLUGIN_URL . 'assets/admin/js/scripts.js', [ 'jquery' ], time(), true );
 				wp_localize_script( 'ajax-script', 'pluginObject', $this->localize_scripts() );

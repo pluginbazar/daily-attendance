@@ -4,7 +4,6 @@
  * Leave Request Tab
  */
 
-
 ?>
 
 <div class="grid grid-cols-1 xl:gap-4 my-4">
@@ -22,9 +21,9 @@
                         <p class="response notice hidden"></p>
                         <div class="mt-4 space-y-6 space-y-6 bg-white">
                             <div class="form-control">
-                                <label for="user_name"><?php echo esc_html__( 'Title', 'daily-attendance' ); ?></label>
+                                <label for="title"><?php echo esc_html__( 'Title', 'daily-attendance' ); ?></label>
                                 <div class="field-wrap mt-2">
-                                    <input type="text" name="user_name" id="user_name" placeholder="User name" autocomplete="off">
+                                    <input type="text" name="title" id="title" placeholder="Title" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-control">
@@ -34,15 +33,15 @@
                                 </div>
                             </div>
                             <div class="form-control">
-                                <label for="email"><?php echo esc_html__( 'Email *', 'daily-attendance' ); ?></label>
+                                <label for="date_from"><?php echo esc_html__( 'Date From', 'daily-attendance' ); ?></label>
                                 <div class="field-wrap mt-2">
-                                    <input type="email" name="email" id="email" placeholder="name@gmail.com" autocomplete="off">
+                                    <input type="text" name="date_from" class="datepicker" id="date_from" placeholder="2023-11-22">
                                 </div>
                             </div>
                             <div class="form-control">
-                                <label for="password"><?php echo esc_html__( 'Password *', 'daily-attendance' ); ?></label>
+                                <label for="date_to"><?php echo esc_html__( 'Date To', 'daily-attendance' ); ?></label>
                                 <div class="field-wrap mt-2">
-                                    <input type="text" name="password" id="password" placeholder="c54a#be@c43$9%901c6*98" autocomplete="off">
+                                    <input type="text" name="date_to" class="datepicker" id="date_to" placeholder="2023-11-22">
                                 </div>
                             </div>
                         </div>

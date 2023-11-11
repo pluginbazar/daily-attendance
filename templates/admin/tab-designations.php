@@ -1,6 +1,6 @@
 <?php
 /**
- * Designations
+ * Designations Data Table
  */
 
 ?>

@@ -21,7 +21,11 @@ if ( isset( $title ) && ! empty( $title ) ) : ?>
 		<?php endif; ?>
 
 	    <?php if ( $table_name == 'dailyattendance-leave-request' ): ?>
-            <div id="btn-open-modal" data-target="modal-add-leave-request" class="button justify-items-end" type="button"><?php echo esc_html__( 'Leave', 'daily-attendance' ); ?></div>
+            <div id="btn-open-modal" data-target="modal-add-leave-request" class="button justify-items-end" type="button"><?php echo esc_html__( 'Leave Request', 'daily-attendance' ); ?></div>
+	    <?php endif; ?>
+
+        <?php if ( $table_name == 'dailyattendance-holidays' ): ?>
+            <div id="btn-open-modal" data-target="modal-add-holidays" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Holiday', 'daily-attendance' ); ?></div>
 	    <?php endif; ?>
     </div>
 

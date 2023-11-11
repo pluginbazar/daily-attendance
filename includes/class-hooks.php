@@ -94,12 +94,11 @@ if ( ! class_exists( 'DAILYATTENDANCE_Hooks' ) ) {
 
 			$sql_holidays = "CREATE TABLE IF NOT EXISTS " . DAILYATTENDANCE_HOLIDAYS_TABLE . " (
 				id int(20) NOT NULL AUTO_INCREMENT,
-				name  varchar(128) NOT NULL,
 				title   varchar(256) NOT NULL,
 				description    varchar(256) NOT NULL,
 				status    varchar(256) NOT NULL,
-				date_from  datetime NOT NULL,
-				date_to  datetime NOT NULL,
+				date_from  date NOT NULL,
+				date_to  date NOT NULL,
 				datetime datetime NOT NULL,
 				PRIMARY KEY (id)
 	        ) ";

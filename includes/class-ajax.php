@@ -14,11 +14,113 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 		function __construct() {
 			add_action( 'wp_ajax_create_user', array( $this, 'create_user' ) );
 			add_action( 'wp_ajax_load_users_table', array( $this, 'load_users_table' ) );
+			add_action( 'wp_ajax_update_user', array( $this, 'update_user' ) );
 			add_action( 'wp_ajax_add_designations', array( $this, 'add_designations' ) );
 			add_action( 'wp_ajax_load_designations_table', array( $this, 'load_designations_table' ) );
+			add_action( 'wp_ajax_leave_request', array( $this, 'leave_request' ) );
 			add_action( 'wp_ajax_load_leave_request_table', array( $this, 'load_leave_request_table' ) );
+			add_action( 'wp_ajax_add_holidays', array( $this, 'add_holidays' ) );
+			add_action( 'wp_ajax_load_holidays_table', array( $this, 'load_holidays_table' ) );
 		}
 
+		/**
+		 * @return void
+		 */
+		function add_holidays() {
+			global $wpdb;
+
+			$_form_data = $_POST['form_data'] ?? '';
+			parse_str( $_form_data, $form_data );
+
+			$title       = $form_data['title'] ?? '';
+			$description = $form_data['description'] ?? '';
+			$date_from   = $form_data['start_date'] ?? '';
+			$date_to     = $form_data['end_date'] ?? '';
+			$status      = $form_data['status'] ?? '';
+
+			if ( empty( $title ) || empty( $description ) || empty( $date_from ) || empty( $date_to ) || empty( $status ) ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'Missing required data.', 'daily-attendance' ) ] );
+			}
+
+			$insert = $wpdb->insert( DAILYATTENDANCE_HOLIDAYS_TABLE, array(
+				'title'       => $title,
+				'description' => $description,
+				'status'      => ucfirst( $status ),
+				'date_from'   => $date_from,
+				'date_to'     => $date_to,
+				'datetime'    => current_time( 'mysql' )
+			) );
+
+			if ( ! $insert ) {
+				wp_send_json_error( [ 'message' => $wpdb->last_error ] );
+			}
+
+			wp_send_json_success( $insert );
+
+		}
+
+		/**
+		 * @return void
+		 */
+		function load_holidays_table() {
+			$holidays   = dailyattendance()->get_holidays();
+			$table_data = array(
+				'headers' => array(
+					'id'          => esc_html__( 'ID', 'daily-attendance' ),
+					'title'       => esc_html__( 'Title', 'daily-attendance' ),
+					'description' => esc_html__( 'Description', 'daily-attendance' ),
+					'status'      => esc_html__( 'Status', 'daily-attendance' ),
+					'dates'       => esc_html__( 'Dates', 'daily-attendance' ),
+					'datetime'    => esc_html__( 'Submitted', 'daily-attendance' ),
+				),
+				'body'    => $holidays,
+			);
+
+			ob_start();
+			dailyattendance_render_data_table( 'dailyattendance-holidays', 'Holidays', $table_data );
+			$table_content = ob_get_clean();
+
+			wp_send_json_success( $table_content );
+		}
+
+		/**
+		 * @return void
+		 */
+		function leave_request() {
+			global $wpdb;
+
+			$_form_data = $_POST['form_data'] ?? '';
+			parse_str( $_form_data, $form_data );
+
+			$title       = $form_data['title'] ?? '';
+			$description = $form_data['description'] ?? '';
+			$date_from   = $form_data['date_from'] ?? '';
+			$date_to     = $form_data['date_to'] ?? '';
+
+			if ( empty( $title ) || empty( $description ) || empty( $date_from ) || empty( $date_to ) ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'Missing required data.', 'daily-attendance' ) ] );
+			}
+
+			$insert = $wpdb->insert( DAILYATTENDANCE_LEAVE_REQUEST_TABLE, array(
+				'user_id'     => get_current_user_id(),
+				'title'       => $title,
+				'description' => $description,
+				'status'      => 'pending',
+				'date_from'   => $date_from,
+				'date_to'     => $date_to,
+				'datetime'    => current_time( 'mysql' )
+			) );
+
+			if ( ! $insert ) {
+				wp_send_json_error( [ 'message' => $wpdb->last_error ] );
+			}
+
+			wp_send_json_success( $insert );
+		}
+
+		/**
+		 * @return void
+		 */
 		function load_leave_request_table() {
 			$leave_request = dailyattendance()->get_leave_request();
 			$table_data    = array(
@@ -29,6 +131,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 					'status'      => esc_html__( 'Status', 'daily-attendance' ),
 					'dates'       => esc_html__( 'Dates', 'daily-attendance' ),
 					'datetime'    => esc_html__( 'Submitted', 'daily-attendance' ),
+					'action'    => esc_html__( 'Action', 'daily-attendance' ),
 				),
 				'body'    => $leave_request,
 			);
@@ -38,7 +141,6 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			$table_content = ob_get_clean();
 
 			wp_send_json_success( $table_content );
-
 		}
 
 		/**
@@ -93,6 +195,43 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 		/**
 		 * @return void
 		 */
+		function update_user() {
+
+			$user_id    = $_POST['user_id'] ?? '';
+			$_form_data = $_POST['form_data'] ?? '';
+			parse_str( $_form_data, $form_data );
+
+			$full_name     = $form_data['full_name'] ?? '';
+			$designation   = $form_data['designation'] ?? '';
+			$role          = $form_data['role'] ?? '';
+			$password      = $form_data['password'] ?? '';
+			$full_name_arr = explode( ' ', trim( $full_name ) );
+			$lastname      = $full_name_arr[ count( $full_name_arr ) - 1 ] ?? '';
+			$firstname     = str_replace( $lastname, '', $full_name );
+
+			if ( empty( $firstname ) || empty( $lastname ) || empty( $role ) || empty( $password ) ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'Missing required data.', 'daily-attendance' ) ] );
+			}
+
+			$update_user = wp_update_user( array(
+				'ID'         => $user_id,
+				'first_name' => $firstname,
+				'last_name'  => $lastname,
+				'role'       => $role,
+				'user_pass'  => $password,
+			) );
+
+			$update_designation = update_user_meta( $user_id, 'designation', $designation );
+
+			if ( ! is_wp_error( $update_user ) && ! is_wp_error( $update_designation ) ) {
+				wp_send_json_success( $update_user );
+			}
+
+		}
+
+		/**
+		 * @return void
+		 */
 		function load_users_table() {
 			$users_list = dailyattendance()->get_users();
 			$users_list = array_map( function ( $user_data ) {
@@ -110,6 +249,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 					'designation' => esc_html__( 'Designation', 'daily-attendance' ),
 					'secret_key'  => esc_html__( 'Secret Key', 'daily-attendance' ),
 					'added_on'    => esc_html__( 'Joined', 'daily-attendance' ),
+					'action'      => esc_html__( 'Action', 'daily-attendance' ),
 				),
 				'body'    => $users_list,
 			);
@@ -172,7 +312,6 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 
 			wp_send_json_success( $user_id );
 		}
-
 
 		/**
 		 * @return DAILYATTENDANCE_Ajax

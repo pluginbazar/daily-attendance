@@ -13,6 +13,18 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 	 */
 	class DAILYATTENDANCE_Functions {
 
+		/**
+		 * @return string[]
+		 */
+		function get_all_user_roles() {
+			global $wp_roles;
+
+			if ( ! isset( $wp_roles ) ) {
+				$wp_roles = new WP_Roles();
+			}
+
+			return $wp_roles->get_names();
+		}
 
 		/**
 		 * Return signature key
@@ -32,12 +44,70 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 		}
 
 		/**
-		 * @return array|object|stdClass[]|null
+		 * @return array
+		 * @throws Exception
 		 */
+		function get_holidays() {
+			global $wpdb;
+
+			$all_holidays       = $wpdb->get_results( 'SELECT id,title,description,date_from,date_to,status,datetime FROM ' . DAILYATTENDANCE_HOLIDAYS_TABLE, ARRAY_A );
+			$all_leave_requests = [];
+
+			foreach ( $all_holidays as $data ) {
+				$all_leave_requests[] = array(
+					'id'          => $data['id'] ?? '',
+					'title'       => $data['title'] ?? '',
+					'description' => $data['description'] ?? '',
+					'status'      => $data['status'] ?? '',
+					'dates'       => $this->formatted_date( $data['date_from'], $data['date_to'] ),
+					'datetime'    => $data['datetime'] ?? '',
+				);
+			}
+
+			return $all_leave_requests;
+		}
+
+		/**
+		 * @param $start_date
+		 * @param $end_date
+		 *
+		 * @return string
+		 * @throws Exception
+		 */
+		function formatted_date( $start_date, $end_date ) {
+			$begin     = new DateTime( $start_date );
+			$end       = new DateTime( $end_date );
+			$end       = $end->modify( '+1 day' );
+			$interval  = new DateInterval( 'P1D' );
+			$dateRange = new DatePeriod( $begin, $interval, $end );
+
+			$dates = [];
+			foreach ( $dateRange as $date ) {
+				$dates[] = $date->format( 'jS M Y' );
+			}
+
+			return implode( ',', $dates );
+		}
+
 		function get_leave_request() {
 			global $wpdb;
 
-			return $wpdb->get_results( 'SELECT user_id,title,description,status, DATEDIFF(date_to,date_from) as dates,datetime FROM ' . DAILYATTENDANCE_LEAVE_REQUEST_TABLE, ARRAY_A );
+			$all_leave_requests_res = $wpdb->get_results( 'SELECT * FROM ' . DAILYATTENDANCE_LEAVE_REQUEST_TABLE, ARRAY_A );
+			$all_leave_requests     = [];
+
+			foreach ( $all_leave_requests_res as $data ) {
+				$all_leave_requests[] = array(
+					'user_id'     => $data['user_id'] ?? '',
+					'title'       => $data['title'] ?? '',
+					'description' => $data['description'] ?? '',
+					'status'      => $data['status'] ?? '',
+					'dates'       => $this->formatted_date( $data['date_from'], $data['date_to'] ),
+					'datetime'    => $data['datetime'] ?? '',
+					'action'      => '',
+				);
+			}
+
+			return $all_leave_requests;
 		}
 
 		/**
@@ -80,6 +150,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'designation' => $designation,
 					'secret_key'  => $user_secret_key,
 					'added_on'    => date( 'jS M Y, g:ia', strtotime( $wp_user->user_registered ) ),
+					'action'      => sprintf( '<button id="update-user" type="button" class="button justify-items-center" data-user-id="%s">%s</button>', $wp_user->ID, esc_html__( 'Edit', 'daily-attendance' ) ),
 				);
 
 				update_user_meta( $wp_user->ID, 'secret_key', $user_secret_key );
