@@ -72,6 +72,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 					'status'      => esc_html__( 'Status', 'daily-attendance' ),
 					'dates'       => esc_html__( 'Dates', 'daily-attendance' ),
 					'datetime'    => esc_html__( 'Submitted', 'daily-attendance' ),
+					'action'      => esc_html__( 'Action', 'daily-attendance' ),
 				),
 				'body'    => $holidays,
 			);
@@ -114,7 +115,6 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			if ( ! $insert ) {
 				wp_send_json_error( [ 'message' => $wpdb->last_error ] );
 			}
-
 			wp_send_json_success( $insert );
 		}
 
@@ -131,7 +131,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 					'status'      => esc_html__( 'Status', 'daily-attendance' ),
 					'dates'       => esc_html__( 'Dates', 'daily-attendance' ),
 					'datetime'    => esc_html__( 'Submitted', 'daily-attendance' ),
-					'action'    => esc_html__( 'Action', 'daily-attendance' ),
+					'action'      => esc_html__( 'Action', 'daily-attendance' ),
 				),
 				'body'    => $leave_request,
 			);
@@ -153,6 +153,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 					'id'                 => esc_html__( 'ID', 'daily-attendance' ),
 					'designation_name'   => esc_html__( 'Designation Name', 'daily-attendance' ),
 					'designation_status' => esc_html__( 'Status', 'daily-attendance' ),
+					'action'             => esc_html__( 'Action', 'daily-attendance' ),
 				),
 				'body'    => $designations,
 			);

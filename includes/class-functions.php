@@ -50,7 +50,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 		function get_holidays() {
 			global $wpdb;
 
-			$all_holidays       = $wpdb->get_results( 'SELECT id,title,description,date_from,date_to,status,datetime FROM ' . DAILYATTENDANCE_HOLIDAYS_TABLE, ARRAY_A );
+			$all_holidays       = $wpdb->get_results( 'SELECT * FROM ' . DAILYATTENDANCE_HOLIDAYS_TABLE, ARRAY_A );
 			$all_leave_requests = [];
 
 			foreach ( $all_holidays as $data ) {
@@ -61,6 +61,8 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'status'      => $data['status'] ?? '',
 					'dates'       => $this->formatted_date( $data['date_from'], $data['date_to'] ),
 					'datetime'    => $data['datetime'] ?? '',
+					'action'      => sprintf('<button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
+						$data['id'],esc_html__('Edit','daily-attendance'),$data['id'],esc_html__('Delete','daily-attendance')),
 				);
 			}
 
@@ -103,7 +105,8 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'status'      => $data['status'] ?? '',
 					'dates'       => $this->formatted_date( $data['date_from'], $data['date_to'] ),
 					'datetime'    => $data['datetime'] ?? '',
-					'action'      => '',
+					'action'      => sprintf('<button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
+						$data['id'],esc_html__('Edit','daily-attendance'),$data['id'],esc_html__('Delete','daily-attendance')),
 				);
 			}
 
@@ -116,7 +119,20 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 		function get_designations() {
 			global $wpdb;
 
-			return $wpdb->get_results( 'SELECT id,designation_name,designation_status FROM ' . DAILYATTENDANCE_DESIGNATIONS_TABLE, ARRAY_A );
+			$designations = $wpdb->get_results( 'SELECT * FROM ' . DAILYATTENDANCE_DESIGNATIONS_TABLE, ARRAY_A );
+
+			$all_designations = [];
+			foreach ( $designations as $data ) {
+				$all_designations[] = array(
+					'id'                 => $data['id'],
+					'designation_name'   => $data['designation_name'],
+					'designation_status' => $data['designation_status'],
+					'action'             => sprintf('<button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
+											$data['id'],esc_html__('Edit','daily-attendance'),$data['id'],esc_html__('Delete','daily-attendance')),
+				);
+			}
+
+			return $all_designations;
 		}
 
 
@@ -150,7 +166,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'designation' => $designation,
 					'secret_key'  => $user_secret_key,
 					'added_on'    => date( 'jS M Y, g:ia', strtotime( $wp_user->user_registered ) ),
-					'action'      => sprintf( '<button id="update-user" type="button" class="button justify-items-center" data-user-id="%s">%s</button>', $wp_user->ID, esc_html__( 'Edit', 'daily-attendance' ) ),
+					'action'      => sprintf( '<button id="update-user" type="button" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>', $wp_user->ID, esc_html__( 'Edit', 'daily-attendance' ) ),
 				);
 
 				update_user_meta( $wp_user->ID, 'secret_key', $user_secret_key );
