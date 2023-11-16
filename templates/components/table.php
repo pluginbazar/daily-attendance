@@ -13,7 +13,7 @@ if ( isset( $title ) && ! empty( $title ) ) : ?>
         <h3 class="text-xl leading-none font-bold text-gray-900"><?php echo esc_html__( $title, 'daily-attendance' ); ?></h3>
 
 		<?php if ( $table_name == 'dailyattendance-users' ): ?>
-            <div id="btn-open-modal" data-target="modal-add-users" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Staff', 'daily-attendance' ); ?></div>
+            <div id="btn-open-modal" data-target="modal-add-user" class="button justify-items-end" type="button"><?php echo esc_html__( 'Add Staff', 'daily-attendance' ); ?></div>
 		<?php endif; ?>
 
 		<?php if ( $table_name == 'dailyattendance-designations' ): ?>

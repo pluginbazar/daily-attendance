@@ -31,7 +31,7 @@
 
         dailyattendance_load_designations_table = () => {
             $.ajax({
-                type: 'POST',
+                type: 'post',
                 url: ajaxurl,
                 data: {
                     'action': 'load_designations_table'
@@ -60,7 +60,7 @@
 
         dailyattendance_load_leave_request_table = () => {
             $.ajax({
-                type: 'POST',
+                type: 'post',
                 url: ajaxurl,
                 data: {
                     'action': 'load_leave_request_table'
@@ -89,7 +89,7 @@
 
         dailyattendance_load_holidays_table = () => {
             $.ajax({
-                type: 'POST',
+                type: 'post',
                 url: ajaxurl,
                 data: {
                     'action': 'load_holidays_table'
@@ -158,9 +158,9 @@
         }
     });
 
-    $('#modal-add-users form.modal-form').on('submit', function (e) {
+    $('#modal-add-user form.modal-form').on('submit', function (e) {
         $.ajax({
-            type: 'POST',
+            type: 'post',
             url: ajaxurl,
             data: {
                 'action': 'create_user',
@@ -169,7 +169,7 @@
             success: function (response) {
                 if (response.success) {
                     dailyattendance_load_users_table();
-                    $('#modal-add-users').addClass('hidden');
+                    $('#modal-add-user').addClass('hidden');
                 }
             }
         });
@@ -177,9 +177,13 @@
         return false;
     });
 
+    $(document).on('click','#edit-user',function (){
+        $('#modal-edit-user').removeClass('hidden');
+    });
+
     $('#modal-add-designations form.modal-form').on('submit', function (e) {
         $.ajax({
-            type: 'POST',
+            type: 'post',
             url: ajaxurl,
             data: {
                 'action': 'add_designations',
@@ -196,9 +200,59 @@
         return false;
     });
 
+    $(document).on('click', '#edit-designation', function () {
+        let userID = $(this).data('user-id');
+        console.log(userID);
+        $('#modal-edit-designation').removeClass('hidden').attr('data-user-id', userID);
+    });
+
+    $('#modal-edit-designation form.modal-form').on('submit', function (e) {
+        let userID = $(this).closest('#modal-edit-designation').data('user-id');
+        $.ajax({
+            type: 'post',
+            url: ajaxurl,
+            data: {
+                'action': 'edit_designation',
+                'user_id': userID,
+                'designation': $(this).serialize(),
+            },
+            success: function (response) {
+                if (response.success) {
+                    dailyattendance_load_designations_table();
+                    $('#modal-edit-designation').addClass('hidden');
+                }
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+
+    $(document).on('click', '#delete-designation', function () {
+
+        let userID = $(this).data('user-id');
+        let confirmation = confirm("Are you sure you want to Delete!");
+
+        if (confirmation === true) {
+            $.ajax({
+                type: 'POST',
+                url: ajaxurl,
+                data: {
+                    'action': 'delete_designation',
+                    'user_id': userID,
+                },
+                success: function (response) {
+                    if (response.success) {
+                        dailyattendance_load_designations_table();
+                    }
+                }
+            });
+        }
+        return false;
+    });
+
     $('#modal-add-leave-request form.modal-form').on('submit', function (e) {
         $.ajax({
-            type: 'POST',
+            type: 'post',
             url: ajaxurl,
             data: {
                 'action': 'leave_request',
@@ -215,9 +269,55 @@
         return false;
     });
 
+    $(document).on('click', '#approve-request', function () {
+
+        let userID = $(this).data('user-id'),
+            confirmation = confirm("Are you sure want to approved!");
+
+        if (confirmation === true) {
+            $.ajax({
+                type: 'POST',
+                url: ajaxurl,
+                data: {
+                    'action': 'approve_request',
+                    'user_id': userID,
+                },
+                success: function (response) {
+                    if (response.success) {
+                        dailyattendance_load_leave_request_table();
+                    }
+                }
+            });
+        }
+        return false;
+    });
+
+    $(document).on('click', '#deny-request', function () {
+
+        let userID = $(this).data('user-id');
+        let confirmation = confirm("Are you sure you want to Deny!");
+
+        if (confirmation === true) {
+            $.ajax({
+                type: 'POST',
+                url: ajaxurl,
+                data: {
+                    'action': 'delete_request',
+                    'user_id': userID,
+                },
+                success: function (response) {
+                    if (response.success) {
+                        dailyattendance_load_leave_request_table();
+                    }
+                }
+            });
+        }
+        return false;
+    });
+
     $('#modal-add-holidays form.modal-form').on('submit', function (e) {
         $.ajax({
-            type: 'POST',
+            type: 'post',
             url: ajaxurl,
             data: {
                 'action': 'add_holidays',
@@ -234,25 +334,26 @@
         return false;
     });
 
-    $('#modal-update-user form.modal-form').on('submit', function (e) {
-        let userID = $('#modal-update-user').data('user-id');
-        $.ajax({
-            type: 'POST',
-            url: ajaxurl,
-            data: {
-                'action': 'update_user',
-                'user_id': userID,
-                'form_data': $(this).serialize(),
-            },
-            success: function (response) {
-                if (response.success) {
-                    dailyattendance_load_users_table();
-                    $('#modal-update-user').addClass('hidden');
-                    console.log(response.data);
+    $(document).on('click', '#delete-holiday', function () {
+
+        let userID = $(this).data('user-id');
+        let confirmation = confirm("Are you sure you want to Delete!");
+
+        if (confirmation === true) {
+            $.ajax({
+                type: 'POST',
+                url: ajaxurl,
+                data: {
+                    'action': 'delete_holiday',
+                    'user_id': userID,
+                },
+                success: function (response) {
+                    if (response.success) {
+                        dailyattendance_load_holidays_table();
+                    }
                 }
-            }
-        });
-        e.preventDefault();
+            });
+        }
         return false;
     });
 
@@ -271,11 +372,6 @@
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
         changeYear: true,
-    });
-
-    $(document).on('click', '#update-user', function () {
-        let userID = $(this).data('user-id');
-        $('#modal-update-user').removeClass('hidden').attr('data-user-id', userID);
     });
 
 })(jQuery, window, document);

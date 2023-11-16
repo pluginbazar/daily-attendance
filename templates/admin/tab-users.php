@@ -9,7 +9,7 @@
     <div class="dailyattendance-users-wrap bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8"></div>
 </div>
 
-<div class="modal hidden relative z-[99999]" id="modal-add-users" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<div class="modal hidden relative z-[99999]" id="modal-add-user" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="modal-bg-overlay"></div>
     <div class="modal-box-wrap">
         <div class="modal-box">
@@ -65,7 +65,7 @@
 
                     <div class="modal-footer mt-3">
                         <button type="submit" name="submission" class="ml-2 button submit-form" value="yes"><?php echo esc_html__( 'Submit', 'daily-attendance' ); ?></button>
-                        <span id="btn-close-modal" data-target="modal-add-users" class="pt-2 text-red-600 cursor-pointer mr-3 text-sm"><?php echo esc_html__( 'Cancel', 'daily-attendance' ); ?></span>
+                        <span id="btn-close-modal" data-target="modal-add-user" class="pt-2 text-red-600 cursor-pointer mr-3 text-sm"><?php echo esc_html__( 'Cancel', 'daily-attendance' ); ?></span>
                     </div>
                 </form>
             </div>
@@ -74,7 +74,7 @@
 </div>
 
 <!--Modal Edit User Info-->
-<div class="modal hidden relative z-[99999]" id="modal-update-user" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<div class="modal hidden relative z-[99999]" id="modal-edit-user" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="modal-bg-overlay"></div>
     <div class="modal-box-wrap">
         <div class="modal-box">
@@ -95,12 +95,12 @@
                                 <div class="field-wrap mt-2">
                                     <select name="designation" id="designation">
                                         <option value=""><?php echo esc_html__( 'Choose...', 'daily-attendance' ); ?></option>
-				                        <?php $all_designations = dailyattendance()->get_designations();
-				                        if ( is_array( $all_designations ) ):
-					                        foreach ( $all_designations as $designation ): ?>
+										<?php $all_designations = dailyattendance()->get_designations();
+										if ( is_array( $all_designations ) ):
+											foreach ( $all_designations as $designation ): ?>
                                                 <option value="<?php echo esc_attr( $designation['designation_name'] ); ?>"><?php echo esc_html__( $designation['designation_name'], 'daily-attendance' ); ?></option>
-					                        <?php endforeach; ?>
-				                        <?php endif; ?>
+											<?php endforeach; ?>
+										<?php endif; ?>
                                     </select>
                                 </div>
                             </div>
@@ -109,10 +109,10 @@
                                 <div class="field-wrap mt-2">
                                     <select name="role" id="role">
                                         <option value=""><?php echo esc_html__('Choose..','daily-attendance'); ?></option>
-                                        <?php  $roles = dailyattendance()->get_all_user_roles();
-                                        foreach ($roles as $role): ?>
+										<?php  $roles = dailyattendance()->get_all_user_roles();
+										foreach ($roles as $role): ?>
                                             <option value="<?php echo strtolower($role); ?>"><?php echo esc_html__($role,'daily-attendance'); ?></option>
-                                        <?php endforeach; ?>
+										<?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
 
                     <div class="modal-footer mt-3">
                         <button type="submit" name="submission" class="ml-2 button submit-form" value="yes"><?php echo esc_html__( 'Update', 'daily-attendance' ); ?></button>
-                        <span id="btn-close-modal" data-target="modal-update-user" class="pt-2 text-red-600 cursor-pointer mr-3 text-sm"><?php echo esc_html__( 'Cancel', 'daily-attendance' ); ?></span>
+                        <span id="btn-close-modal" data-target="modal-edit-user" class="pt-2 text-red-600 cursor-pointer mr-3 text-sm"><?php echo esc_html__( 'Cancel', 'daily-attendance' ); ?></span>
                     </div>
                 </form>
             </div>

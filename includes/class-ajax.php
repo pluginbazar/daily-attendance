@@ -14,13 +14,65 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 		function __construct() {
 			add_action( 'wp_ajax_create_user', array( $this, 'create_user' ) );
 			add_action( 'wp_ajax_load_users_table', array( $this, 'load_users_table' ) );
-			add_action( 'wp_ajax_update_user', array( $this, 'update_user' ) );
 			add_action( 'wp_ajax_add_designations', array( $this, 'add_designations' ) );
 			add_action( 'wp_ajax_load_designations_table', array( $this, 'load_designations_table' ) );
 			add_action( 'wp_ajax_leave_request', array( $this, 'leave_request' ) );
 			add_action( 'wp_ajax_load_leave_request_table', array( $this, 'load_leave_request_table' ) );
 			add_action( 'wp_ajax_add_holidays', array( $this, 'add_holidays' ) );
 			add_action( 'wp_ajax_load_holidays_table', array( $this, 'load_holidays_table' ) );
+			add_action( 'wp_ajax_edit_designation', array( $this, 'edit_designation' ) );
+			add_action( 'wp_ajax_delete_designation', array( $this, 'delete_designation' ) );
+			add_action( 'wp_ajax_delete_request', array( $this, 'delete_request' ) );
+			add_action( 'wp_ajax_approve_request', array( $this, 'approve_request' ) );
+			add_action( 'wp_ajax_delete_holiday', array( $this, 'delete_holiday' ) );
+
+		}
+
+		function delete_holiday(){
+			global $wpdb;
+			$user_id = $_POST['user_id'] ?? '';
+
+			$delete = $wpdb->delete( DAILYATTENDANCE_HOLIDAYS_TABLE, [ 'ID' => $user_id ] );
+			if ( $delete ) {
+				wp_send_json_success( $delete );
+			}
+		}
+
+		function approve_request() {
+			global $wpdb;
+			$user_id = $_POST['user_id'] ?? '';
+
+			$update = $wpdb->update( DAILYATTENDANCE_LEAVE_REQUEST_TABLE, [ 'status' => 'approved' ], [ 'ID' => $user_id ] );
+			if ( $update ) {
+				wp_send_json_success( $update );
+			}
+		}
+
+		/**
+		 * @return void
+		 */
+		function delete_request() {
+			global $wpdb;
+			$user_id = $_POST['user_id'] ?? '';
+
+			$delete = $wpdb->delete( DAILYATTENDANCE_LEAVE_REQUEST_TABLE, [ 'ID' => $user_id ] );
+			if ( $delete ) {
+				wp_send_json_success( $delete );
+			}
+		}
+
+		/**
+		 * @return void
+		 */
+		function delete_designation() {
+			global $wpdb;
+			$user_id = $_POST['user_id'] ?? '';
+
+			$delete = $wpdb->delete( DAILYATTENDANCE_DESIGNATIONS_TABLE, [ 'ID' => $user_id ] );
+
+			if ( $delete ) {
+				wp_send_json_success( $delete );
+			}
 		}
 
 		/**
@@ -159,10 +211,29 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			);
 
 			ob_start();
-			dailyattendance_render_data_table( 'dailyattendance-designations', 'Designation', $table_data );
+			dailyattendance_render_data_table( 'dailyattendance-designations', 'Designations', $table_data );
 			$table_content = ob_get_clean();
 
 			wp_send_json_success( $table_content );
+		}
+
+		function edit_designation() {
+			global $wpdb;
+			$user_id    = $_POST['user_id'] ?? '';
+			$_form_data = $_POST['designation'] ?? '';
+			parse_str( $_form_data, $form_data );
+
+			$designation = $form_data['designation'];
+			if ( empty( $designation ) ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'Missing required data.', 'daily-attendance' ) ] );
+			}
+			$update = $wpdb->update(
+				DAILYATTENDANCE_DESIGNATIONS_TABLE, [ 'designation_name' => $designation ], [ 'ID' => $user_id ],
+			);
+
+			if ( $update ) {
+				wp_send_json_success( $update );
+			}
 		}
 
 		/**
@@ -191,43 +262,6 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			}
 
 			wp_send_json_success( $insert );
-		}
-
-		/**
-		 * @return void
-		 */
-		function update_user() {
-
-			$user_id    = $_POST['user_id'] ?? '';
-			$_form_data = $_POST['form_data'] ?? '';
-			parse_str( $_form_data, $form_data );
-
-			$full_name     = $form_data['full_name'] ?? '';
-			$designation   = $form_data['designation'] ?? '';
-			$role          = $form_data['role'] ?? '';
-			$password      = $form_data['password'] ?? '';
-			$full_name_arr = explode( ' ', trim( $full_name ) );
-			$lastname      = $full_name_arr[ count( $full_name_arr ) - 1 ] ?? '';
-			$firstname     = str_replace( $lastname, '', $full_name );
-
-			if ( empty( $firstname ) || empty( $lastname ) || empty( $role ) || empty( $password ) ) {
-				wp_send_json_error( [ 'message' => esc_html__( 'Missing required data.', 'daily-attendance' ) ] );
-			}
-
-			$update_user = wp_update_user( array(
-				'ID'         => $user_id,
-				'first_name' => $firstname,
-				'last_name'  => $lastname,
-				'role'       => $role,
-				'user_pass'  => $password,
-			) );
-
-			$update_designation = update_user_meta( $user_id, 'designation', $designation );
-
-			if ( ! is_wp_error( $update_user ) && ! is_wp_error( $update_designation ) ) {
-				wp_send_json_success( $update_user );
-			}
-
 		}
 
 		/**

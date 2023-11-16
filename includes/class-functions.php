@@ -61,7 +61,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'status'      => $data['status'] ?? '',
 					'dates'       => $this->formatted_date( $data['date_from'], $data['date_to'] ),
 					'datetime'    => $data['datetime'] ?? '',
-					'action'      => sprintf('<button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
+					'action'      => sprintf('<button id="edit-holiday" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button id="delete-holiday" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
 						$data['id'],esc_html__('Edit','daily-attendance'),$data['id'],esc_html__('Delete','daily-attendance')),
 				);
 			}
@@ -105,8 +105,8 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'status'      => $data['status'] ?? '',
 					'dates'       => $this->formatted_date( $data['date_from'], $data['date_to'] ),
 					'datetime'    => $data['datetime'] ?? '',
-					'action'      => sprintf('<button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
-						$data['id'],esc_html__('Edit','daily-attendance'),$data['id'],esc_html__('Delete','daily-attendance')),
+					'action'      => sprintf('<button id="approve-request" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button id="deny-request" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
+						$data['id'],esc_html__('Approve','daily-attendance'),$data['id'],esc_html__('Deny','daily-attendance')),
 				);
 			}
 
@@ -127,7 +127,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'id'                 => $data['id'],
 					'designation_name'   => $data['designation_name'],
 					'designation_status' => $data['designation_status'],
-					'action'             => sprintf('<button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
+					'action'             => sprintf('<button id="edit-designation" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button id="delete-designation" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
 											$data['id'],esc_html__('Edit','daily-attendance'),$data['id'],esc_html__('Delete','daily-attendance')),
 				);
 			}
@@ -166,7 +166,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'designation' => $designation,
 					'secret_key'  => $user_secret_key,
 					'added_on'    => date( 'jS M Y, g:ia', strtotime( $wp_user->user_registered ) ),
-					'action'      => sprintf( '<button id="update-user" type="button" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>', $wp_user->ID, esc_html__( 'Edit', 'daily-attendance' ) ),
+					'action'      => sprintf( '<button id="edit-user" type="button" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>', $wp_user->ID, esc_html__( 'Edit', 'daily-attendance' ) ),
 				);
 
 				update_user_meta( $wp_user->ID, 'secret_key', $user_secret_key );
