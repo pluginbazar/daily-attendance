@@ -14,21 +14,26 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 		function __construct() {
 			add_action( 'wp_ajax_create_user', array( $this, 'create_user' ) );
 			add_action( 'wp_ajax_load_users_table', array( $this, 'load_users_table' ) );
+			add_action( 'wp_ajax_edit_user', array( $this, 'edit_user' ) );
+
 			add_action( 'wp_ajax_add_designations', array( $this, 'add_designations' ) );
 			add_action( 'wp_ajax_load_designations_table', array( $this, 'load_designations_table' ) );
-			add_action( 'wp_ajax_leave_request', array( $this, 'leave_request' ) );
-			add_action( 'wp_ajax_load_leave_request_table', array( $this, 'load_leave_request_table' ) );
-			add_action( 'wp_ajax_add_holidays', array( $this, 'add_holidays' ) );
-			add_action( 'wp_ajax_load_holidays_table', array( $this, 'load_holidays_table' ) );
 			add_action( 'wp_ajax_edit_designation', array( $this, 'edit_designation' ) );
 			add_action( 'wp_ajax_delete_designation', array( $this, 'delete_designation' ) );
+
+			add_action( 'wp_ajax_leave_request', array( $this, 'leave_request' ) );
+			add_action( 'wp_ajax_load_leave_request_table', array( $this, 'load_leave_request_table' ) );
 			add_action( 'wp_ajax_delete_request', array( $this, 'delete_request' ) );
 			add_action( 'wp_ajax_approve_request', array( $this, 'approve_request' ) );
+
+
+			add_action( 'wp_ajax_add_holidays', array( $this, 'add_holidays' ) );
+			add_action( 'wp_ajax_load_holidays_table', array( $this, 'load_holidays_table' ) );
 			add_action( 'wp_ajax_delete_holiday', array( $this, 'delete_holiday' ) );
 
 		}
 
-		function delete_holiday(){
+		function delete_holiday() {
 			global $wpdb;
 			$user_id = $_POST['user_id'] ?? '';
 
@@ -38,46 +43,28 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			}
 		}
 
-		function approve_request() {
-			global $wpdb;
-			$user_id = $_POST['user_id'] ?? '';
+		function load_holidays_table() {
+			$holidays   = dailyattendance()->get_holidays();
+			$table_data = array(
+				'headers' => array(
+					'id'          => esc_html__( 'ID', 'daily-attendance' ),
+					'title'       => esc_html__( 'Title', 'daily-attendance' ),
+					'description' => esc_html__( 'Description', 'daily-attendance' ),
+					'status'      => esc_html__( 'Status', 'daily-attendance' ),
+					'dates'       => esc_html__( 'Dates', 'daily-attendance' ),
+					'datetime'    => esc_html__( 'Submitted', 'daily-attendance' ),
+					'action'      => esc_html__( 'Action', 'daily-attendance' ),
+				),
+				'body'    => $holidays,
+			);
 
-			$update = $wpdb->update( DAILYATTENDANCE_LEAVE_REQUEST_TABLE, [ 'status' => 'approved' ], [ 'ID' => $user_id ] );
-			if ( $update ) {
-				wp_send_json_success( $update );
-			}
+			ob_start();
+			dailyattendance_render_data_table( 'dailyattendance-holidays', 'Holidays', $table_data );
+			$table_content = ob_get_clean();
+
+			wp_send_json_success( $table_content );
 		}
 
-		/**
-		 * @return void
-		 */
-		function delete_request() {
-			global $wpdb;
-			$user_id = $_POST['user_id'] ?? '';
-
-			$delete = $wpdb->delete( DAILYATTENDANCE_LEAVE_REQUEST_TABLE, [ 'ID' => $user_id ] );
-			if ( $delete ) {
-				wp_send_json_success( $delete );
-			}
-		}
-
-		/**
-		 * @return void
-		 */
-		function delete_designation() {
-			global $wpdb;
-			$user_id = $_POST['user_id'] ?? '';
-
-			$delete = $wpdb->delete( DAILYATTENDANCE_DESIGNATIONS_TABLE, [ 'ID' => $user_id ] );
-
-			if ( $delete ) {
-				wp_send_json_success( $delete );
-			}
-		}
-
-		/**
-		 * @return void
-		 */
 		function add_holidays() {
 			global $wpdb;
 
@@ -111,14 +98,31 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 
 		}
 
-		/**
-		 * @return void
-		 */
-		function load_holidays_table() {
-			$holidays   = dailyattendance()->get_holidays();
-			$table_data = array(
+		function approve_request() {
+			global $wpdb;
+			$user_id = $_POST['user_id'] ?? '';
+
+			$update = $wpdb->update( DAILYATTENDANCE_LEAVE_REQUEST_TABLE, [ 'status' => 'approved' ], [ 'ID' => $user_id ] );
+			if ( $update ) {
+				wp_send_json_success( $update );
+			}
+		}
+
+		function delete_request() {
+			global $wpdb;
+			$user_id = $_POST['user_id'] ?? '';
+
+			$delete = $wpdb->delete( DAILYATTENDANCE_LEAVE_REQUEST_TABLE, [ 'ID' => $user_id ] );
+			if ( $delete ) {
+				wp_send_json_success( $delete );
+			}
+		}
+
+		function load_leave_request_table() {
+			$leave_request = dailyattendance()->get_leave_request();
+			$table_data    = array(
 				'headers' => array(
-					'id'          => esc_html__( 'ID', 'daily-attendance' ),
+					'user_id'     => esc_html__( 'User ID', 'daily-attendance' ),
 					'title'       => esc_html__( 'Title', 'daily-attendance' ),
 					'description' => esc_html__( 'Description', 'daily-attendance' ),
 					'status'      => esc_html__( 'Status', 'daily-attendance' ),
@@ -126,19 +130,16 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 					'datetime'    => esc_html__( 'Submitted', 'daily-attendance' ),
 					'action'      => esc_html__( 'Action', 'daily-attendance' ),
 				),
-				'body'    => $holidays,
+				'body'    => $leave_request,
 			);
 
 			ob_start();
-			dailyattendance_render_data_table( 'dailyattendance-holidays', 'Holidays', $table_data );
+			dailyattendance_render_data_table( 'dailyattendance-leave-request', 'Leave Request', $table_data );
 			$table_content = ob_get_clean();
 
 			wp_send_json_success( $table_content );
 		}
 
-		/**
-		 * @return void
-		 */
 		function leave_request() {
 			global $wpdb;
 
@@ -170,51 +171,15 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			wp_send_json_success( $insert );
 		}
 
-		/**
-		 * @return void
-		 */
-		function load_leave_request_table() {
-			$leave_request = dailyattendance()->get_leave_request();
-			$table_data    = array(
-				'headers' => array(
-					'user_id'     => esc_html__( 'User ID', 'daily-attendance' ),
-					'title'       => esc_html__( 'Title', 'daily-attendance' ),
-					'description' => esc_html__( 'Description', 'daily-attendance' ),
-					'status'      => esc_html__( 'Status', 'daily-attendance' ),
-					'dates'       => esc_html__( 'Dates', 'daily-attendance' ),
-					'datetime'    => esc_html__( 'Submitted', 'daily-attendance' ),
-					'action'      => esc_html__( 'Action', 'daily-attendance' ),
-				),
-				'body'    => $leave_request,
-			);
+		function delete_designation() {
+			global $wpdb;
+			$user_id = $_POST['user_id'] ?? '';
 
-			ob_start();
-			dailyattendance_render_data_table( 'dailyattendance-leave-request', 'Leave Request', $table_data );
-			$table_content = ob_get_clean();
+			$delete = $wpdb->delete( DAILYATTENDANCE_DESIGNATIONS_TABLE, [ 'ID' => $user_id ] );
 
-			wp_send_json_success( $table_content );
-		}
-
-		/**
-		 * @return void
-		 */
-		function load_designations_table() {
-			$designations = dailyattendance()->get_designations();
-			$table_data   = array(
-				'headers' => array(
-					'id'                 => esc_html__( 'ID', 'daily-attendance' ),
-					'designation_name'   => esc_html__( 'Designation Name', 'daily-attendance' ),
-					'designation_status' => esc_html__( 'Status', 'daily-attendance' ),
-					'action'             => esc_html__( 'Action', 'daily-attendance' ),
-				),
-				'body'    => $designations,
-			);
-
-			ob_start();
-			dailyattendance_render_data_table( 'dailyattendance-designations', 'Designations', $table_data );
-			$table_content = ob_get_clean();
-
-			wp_send_json_success( $table_content );
+			if ( $delete ) {
+				wp_send_json_success( $delete );
+			}
 		}
 
 		function edit_designation() {
@@ -236,9 +201,25 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			}
 		}
 
-		/**
-		 * @return void
-		 */
+		function load_designations_table() {
+			$designations = dailyattendance()->get_designations();
+			$table_data   = array(
+				'headers' => array(
+					'id'                 => esc_html__( 'ID', 'daily-attendance' ),
+					'designation_name'   => esc_html__( 'Designation Name', 'daily-attendance' ),
+					'designation_status' => esc_html__( 'Status', 'daily-attendance' ),
+					'action'             => esc_html__( 'Action', 'daily-attendance' ),
+				),
+				'body'    => $designations,
+			);
+
+			ob_start();
+			dailyattendance_render_data_table( 'dailyattendance-designations', 'Designations', $table_data );
+			$table_content = ob_get_clean();
+
+			wp_send_json_success( $table_content );
+		}
+
 		function add_designations() {
 
 			global $wpdb;
@@ -264,9 +245,35 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			wp_send_json_success( $insert );
 		}
 
-		/**
-		 * @return void
-		 */
+		function edit_user() {
+			global $wpdb;
+			$user_id = $_POST['user_id'] ?? '';
+
+			$_form_data = $_POST['user_data'] ?? '';
+			parse_str( $_form_data, $form_data );
+
+			$full_name   = $form_data['full_name'] ?? '';
+			$designation = $form_data['designation'] ?? '';
+			$role        = $form_data['role'] ?? '';
+			$password    = $form_data['password'] ?? '';
+
+			$data = array(
+				'ID'           => $user_id,
+				'display_name' => $full_name,
+				'designation'  => $designation,
+				'role'         => $role,
+				'password'     => $password,
+			);
+
+			$user_data = wp_update_user( $data );
+
+			if ( is_wp_error( $user_data ) ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'User updated unsuccessfully!', 'daily-attendance' ) ] );
+			} else {
+				wp_send_json_success( [ 'message' => esc_html__( 'User updated successfully!', 'daily-attendance' ) ] );
+			}
+		}
+
 		function load_users_table() {
 			$users_list = dailyattendance()->get_users();
 			$users_list = array_map( function ( $user_data ) {
@@ -296,9 +303,6 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			wp_send_json_success( $table_content );
 		}
 
-		/**
-		 * @return void
-		 */
 		function create_user() {
 
 			$_form_data = $_POST['form_data'] ?? '';

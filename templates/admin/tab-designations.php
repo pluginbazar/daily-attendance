@@ -44,7 +44,7 @@
         <div class="modal-box">
             <div class="modal-content w-full max-w-md max-h-full rounded">
                 <p class="text-2xl font-bold text-left"><?php echo esc_html__( 'Edit Designation', 'daily-attendance' ); ?></p>
-                <form class="modal-content-wrap modal-form" method="post">
+                <form id="edit-designation-form" class="modal-content-wrap modal-form" method="post">
                     <div class="mt-3 text-center sm:mt-0 sm:text-left">
                         <p class="response notice hidden"></p>
                         <div class="mt-4 space-y-6 space-y-6 bg-white">

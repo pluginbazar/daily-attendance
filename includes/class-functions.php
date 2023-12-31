@@ -127,7 +127,7 @@ if ( ! class_exists( 'DAILYATTENDANCE_Functions' ) ) {
 					'id'                 => $data['id'],
 					'designation_name'   => $data['designation_name'],
 					'designation_status' => $data['designation_status'],
-					'action'             => sprintf('<button id="edit-designation" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button><button id="delete-designation" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-user-id="%s">%s</button>',
+					'action'             => sprintf('<button id="edit-designation" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold mr-2 py-2 px-4 border border-gray-400 rounded shadow" data-edit-id="%s">%s</button><button id="delete-designation" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-delete-id="%s">%s</button>',
 											$data['id'],esc_html__('Edit','daily-attendance'),$data['id'],esc_html__('Delete','daily-attendance')),
 				);
 			}

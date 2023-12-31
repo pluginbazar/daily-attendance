@@ -116,6 +116,7 @@
             });
         };
 
+    
     $(document).on('click', '.dailyattendance-sidebar ul > li', function () {
         let users_table, el_dailyattendance_container = $('.dailyattendance-container'),
             this_nav_item_wrap = $(this),
@@ -158,6 +159,7 @@
         }
     });
 
+
     $('#modal-add-user form.modal-form').on('submit', function (e) {
         $.ajax({
             type: 'post',
@@ -177,9 +179,38 @@
         return false;
     });
 
-    $(document).on('click','#edit-user',function (){
+
+    $(document).on('click', '#edit-user', function () {
+
+        let editID = $(this).data('user-id');
         $('#modal-edit-user').removeClass('hidden');
+        $('#modal-edit-user form.modal-form').attr('data-edit-id', editID);
     });
+
+
+    $('#modal-edit-user form.modal-form').on('submit', function (e) {
+
+        let editID = $(this).attr('data-edit-id');
+
+        $.ajax({
+            type: 'post',
+            url: ajaxurl,
+            data: {
+                'action': 'edit_user',
+                'user_id': editID,
+                'user_data': $(this).serialize(),
+            },
+            success: function (response) {
+                if (response.success) {
+                    dailyattendance_load_users_table();
+                    $('#modal-edit-user').addClass('hidden');
+                }
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+
 
     $('#modal-add-designations form.modal-form').on('submit', function (e) {
         $.ajax({
@@ -200,20 +231,24 @@
         return false;
     });
 
+
     $(document).on('click', '#edit-designation', function () {
-        let userID = $(this).data('user-id');
-        console.log(userID);
-        $('#modal-edit-designation').removeClass('hidden').attr('data-user-id', userID);
+        let editID = $(this).data('edit-id');
+        $('#modal-edit-designation').removeClass('hidden');
+        $('#modal-edit-designation form.modal-form').attr('data-edit-id', editID);
     });
 
+
     $('#modal-edit-designation form.modal-form').on('submit', function (e) {
-        let userID = $(this).closest('#modal-edit-designation').data('user-id');
+
+        let editID = $(this).attr('data-edit-id');
+
         $.ajax({
             type: 'post',
             url: ajaxurl,
             data: {
                 'action': 'edit_designation',
-                'user_id': userID,
+                'user_id': editID,
                 'designation': $(this).serialize(),
             },
             success: function (response) {
@@ -227,9 +262,10 @@
         return false;
     });
 
+
     $(document).on('click', '#delete-designation', function () {
 
-        let userID = $(this).data('user-id');
+        let userID = $(this).data('delete-id');
         let confirmation = confirm("Are you sure you want to Delete!");
 
         if (confirmation === true) {
@@ -250,6 +286,7 @@
         return false;
     });
 
+
     $('#modal-add-leave-request form.modal-form').on('submit', function (e) {
         $.ajax({
             type: 'post',
@@ -269,9 +306,11 @@
         return false;
     });
 
+
     $(document).on('click', '#approve-request', function () {
 
-        let userID = $(this).data('user-id'),
+        let thisButton = $(this);
+        let userID = thisButton.data('user-id'),
             confirmation = confirm("Are you sure want to approved!");
 
         if (confirmation === true) {
@@ -284,6 +323,7 @@
                 },
                 success: function (response) {
                     if (response.success) {
+                        thisButton.attributes('disabled', true);
                         dailyattendance_load_leave_request_table();
                     }
                 }
@@ -291,6 +331,7 @@
         }
         return false;
     });
+
 
     $(document).on('click', '#deny-request', function () {
 
@@ -315,6 +356,7 @@
         return false;
     });
 
+
     $('#modal-add-holidays form.modal-form').on('submit', function (e) {
         $.ajax({
             type: 'post',
@@ -333,6 +375,7 @@
         e.preventDefault();
         return false;
     });
+
 
     $(document).on('click', '#delete-holiday', function () {
 
@@ -357,9 +400,11 @@
         return false;
     });
 
+
     $(document).on('click', '#btn-open-modal', function () {
         $('#' + $(this).data('target')).removeClass('hidden');
     });
+
 
     $(document).on('click', '#btn-close-modal', function () {
         $('#' + $(this).data('target')).addClass('hidden');
@@ -367,6 +412,7 @@
         $('#modal-add-leave-request').addClass('hidden');
         $('#modal-add-holidays').addClass('hidden');
     });
+
 
     $('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd',
