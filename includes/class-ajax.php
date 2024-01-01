@@ -30,30 +30,6 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			add_action( 'wp_ajax_add_holidays', array( $this, 'add_holidays' ) );
 			add_action( 'wp_ajax_load_holidays_table', array( $this, 'load_holidays_table' ) );
 			add_action( 'wp_ajax_delete_holiday', array( $this, 'delete_holiday' ) );
-
-			add_action( 'wp_ajax_show_edit_user_data', array( $this, 'show_edit_user_data' ) );
-		}
-
-		function show_edit_user_data() {
-			$user_id = $_POST['user_id'] ?? '';
-
-			$user         = get_user_by( 'id', $user_id );
-			$display_name = $user->display_name;
-			$roles        = $user->roles[0];
-			$designation  = get_post_meta( $user_id, 'designation' );
-			$meta         = get_userdata( $user_id );
-
-			$data = array(
-				'display_name' => $display_name,
-				'roles'        => $roles,
-				'designation'  => $designation,
-			);
-
-			echo '<pre>';
-			print_r( $meta );
-			print_r( $user_id );
-			echo '</pre>';
-
 		}
 
 		function delete_holiday() {
