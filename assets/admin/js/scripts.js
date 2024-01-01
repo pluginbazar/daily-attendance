@@ -116,7 +116,7 @@
             });
         };
 
-    
+
     $(document).on('click', '.dailyattendance-sidebar ul > li', function () {
         let users_table, el_dailyattendance_container = $('.dailyattendance-container'),
             this_nav_item_wrap = $(this),

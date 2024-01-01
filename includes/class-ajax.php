@@ -31,6 +31,29 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			add_action( 'wp_ajax_load_holidays_table', array( $this, 'load_holidays_table' ) );
 			add_action( 'wp_ajax_delete_holiday', array( $this, 'delete_holiday' ) );
 
+			add_action( 'wp_ajax_show_edit_user_data', array( $this, 'show_edit_user_data' ) );
+		}
+
+		function show_edit_user_data() {
+			$user_id = $_POST['user_id'] ?? '';
+
+			$user         = get_user_by( 'id', $user_id );
+			$display_name = $user->display_name;
+			$roles        = $user->roles[0];
+			$designation  = get_post_meta( $user_id, 'designation' );
+			$meta         = get_userdata( $user_id );
+
+			$data = array(
+				'display_name' => $display_name,
+				'roles'        => $roles,
+				'designation'  => $designation,
+			);
+
+			echo '<pre>';
+			print_r( $meta );
+			print_r( $user_id );
+			echo '</pre>';
+
 		}
 
 		function delete_holiday() {
@@ -246,7 +269,6 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 		}
 
 		function edit_user() {
-			global $wpdb;
 			$user_id = $_POST['user_id'] ?? '';
 
 			$_form_data = $_POST['user_data'] ?? '';
@@ -257,13 +279,24 @@ if ( ! class_exists( 'DAILYATTENDANCE_Ajax' ) ) {
 			$role        = $form_data['role'] ?? '';
 			$password    = $form_data['password'] ?? '';
 
-			$data = array(
-				'ID'           => $user_id,
-				'display_name' => $full_name,
-				'designation'  => $designation,
-				'role'         => $role,
-				'password'     => $password,
-			);
+			$data = [];
+
+			if ( ! empty( $full_name ) ) {
+				$data['display_name'] = esc_html__( $full_name, 'daily-attendance' );
+			}
+			if ( ! empty( $designation ) ) {
+				$data['designation'] = esc_html__( $designation, 'daily-attendance' );
+			}
+			if ( ! empty( $full_name ) ) {
+				$data['role'] = esc_html__( $role, 'daily-attendance' );
+			}
+			if ( ! empty( $full_name ) ) {
+				$data['user_pass'] = esc_html__( $password, 'daily-attendance' );
+			}
+
+			if ( ! empty( $data ) ) {
+				$data['ID'] = $user_id;
+			}
 
 			$user_data = wp_update_user( $data );
 
